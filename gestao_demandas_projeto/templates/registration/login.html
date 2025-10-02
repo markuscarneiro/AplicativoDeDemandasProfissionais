@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 2rem auto;
+    }
+    
+    .login-card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: none;
+        border-radius: 1rem;
+    }
+    
+    .login-header {
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+        color: white;
+        border-radius: 1rem 1rem 0 0 !important;
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .login-header i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .login-body {
+        padding: 2rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1rem;
+    }
+    
+    .form-floating .form-control {
+        border-radius: 0.5rem;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .form-floating .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .btn-login {
+        width: 100%;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .forgot-password {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .forgot-password a {
+        color: #6c757d;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+    
+    .forgot-password a:hover {
+        color: #0d6efd;
+    }
+    
+    .login-footer {
+        background-color: #f8f9fa;
+        border-radius: 0 0 1rem 1rem;
+        padding: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .error-messages {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .error-messages ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="login-container">
+                <div class="card login-card">
+                    <!-- Header do Login -->
+                    <div class="login-header">
+                        <i class="bi bi-shield-lock"></i>
+                        <h3 class="mb-0">Acesso ao Sistema</h3>
+                        <p class="mb-0 opacity-75">Gestão de Demandas</p>
+                    </div>
+                    
+                    <!-- Corpo do Login -->
+                    <div class="login-body">
+                        <!-- Mensagens de Erro -->
+                        {% if form.errors %}
+                            <div class="error-messages">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <strong>Erro no login:</strong>
+                                {% for field, errors in form.errors.items %}
+                                    <ul>
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Formulário de Login -->
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <!-- Campo Usuário -->
+                            <div class="form-floating">
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="id_username" 
+                                    name="username" 
+                                    placeholder="Nome de usuário"
+                                    value="{{ form.username.value|default:'' }}"
+                                    required
+                                    autofocus
+                                >
+                                <label for="id_username">
+                                    <i class="bi bi-person"></i>
+                                    Nome de usuário
+                                </label>
+                            </div>
+                            
+                            <!-- Campo Senha -->
+                            <div class="form-floating">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="id_password" 
+                                    name="password" 
+                                    placeholder="Senha"
+                                    required
+                                >
+                                <label for="id_password">
+                                    <i class="bi bi-lock"></i>
+                                    Senha
+                                </label>
+                            </div>
+                            
+                            <!-- Hidden field para redirecionamento -->
+                            {% if next %}
+                                <input type="hidden" name="next" value="{{ next }}">
+                            {% endif %}
+                            
+                            <!-- Botão de Login -->
+                            <button type="submit" class="btn btn-primary btn-login">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Entrar no Sistema
+                            </button>
+                        </form>
+                        
+                        <!-- Link Esqueceu a Senha -->
+                        <div class="forgot-password">
+                            <a href="#" onclick="alert('Funcionalidade em desenvolvimento')">
+                                <i class="bi bi-question-circle"></i>
+                                Esqueceu sua senha?
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer do Login -->
+                    <div class="login-footer">
+                        <i class="bi bi-info-circle"></i>
+                        Use suas credenciais para acessar o sistema
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Foco automático no campo de usuário
+    document.addEventListener('DOMContentLoaded', function() {
+        const usernameField = document.getElementById('id_username');
+        if (usernameField && !usernameField.value) {
+            usernameField.focus();
+        }
+    });
+    
+    // Efeito visual nos campos de input
+    document.querySelectorAll('.form-control').forEach(function(input) {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+
+{% block title %}Matriz de Eisenhower - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    Matriz de Eisenhower
+                </h1>
+                <p class="text-muted mb-0">
+                    Organize suas demandas por importância e urgência
+                </p>
+            </div>
+            <a href="{% url 'demandas:demanda_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Voltar
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Legenda -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <i class="bi bi-info-circle"></i>
+                    Como funciona a Matriz de Eisenhower
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Classificação por Criticidade:</strong></p>
+                        <ul class="mb-0">
+                            <li><strong>Importante:</strong> Criticidade Alta ou Crítica</li>
+                            <li><strong>Não Importante:</strong> Criticidade Baixa ou Média</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Classificação por Urgência:</strong></p>
+                        <ul class="mb-0">
+                            <li><strong>Urgente:</strong> Prioridade 4 ou 5</li>
+                            <li><strong>Não Urgente:</strong> Prioridade 1, 2 ou 3</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Matriz 2x2 -->
+<div class="row g-3">
+    <!-- Quadrante 1: Urgente e Importante -->
+    <div class="col-md-6">
+        <div class="card h-100 border-danger">
+            <div class="card-header bg-danger text-white">
+                <h6 class="m-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Q1: Urgente e Importante
+                </h6>
+                <small>Faça Imediatamente ({{ quadrante1|length }} demandas)</small>
+            </div>
+            <div class="card-body">
+                {% for demanda in quadrante1 %}
+                <div class="card mb-2 border-danger">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-1">
+                                    <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                        <code>{{ demanda.codigo }}</code>
+                                    </a>
+                                </h6>
+                                <p class="card-text mb-1">{{ demanda.titulo|truncatechars:40 }}</p>
+                                <small class="text-muted">
+                                    {{ demanda.responsavel }} • 
+                                    Prazo: {{ demanda.data_prazo|date:"d/m/Y" }}
+                                    {% if demanda.esta_atrasada %}
+                                        <span class="text-danger">• Atrasada</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                                <span class="badge bg-danger">{{ demanda.prioridade }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="bi bi-check-circle display-4 text-success"></i>
+                    <p class="text-muted mt-2">Nenhuma demanda urgente e importante!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrante 2: Não Urgente e Importante -->
+    <div class="col-md-6">
+        <div class="card h-100 border-success">
+            <div class="card-header bg-success text-white">
+                <h6 class="m-0">
+                    <i class="bi bi-calendar-check"></i>
+                    Q2: Não Urgente e Importante
+                </h6>
+                <small>Agende e Planeje ({{ quadrante2|length }} demandas)</small>
+            </div>
+            <div class="card-body">
+                {% for demanda in quadrante2 %}
+                <div class="card mb-2 border-success">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-1">
+                                    <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                        <code>{{ demanda.codigo }}</code>
+                                    </a>
+                                </h6>
+                                <p class="card-text mb-1">{{ demanda.titulo|truncatechars:40 }}</p>
+                                <small class="text-muted">
+                                    {{ demanda.responsavel }} • 
+                                    Prazo: {{ demanda.data_prazo|date:"d/m/Y" }}
+                                    {% if demanda.esta_atrasada %}
+                                        <span class="text-danger">• Atrasada</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                                <span class="badge bg-success">{{ demanda.prioridade }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="bi bi-calendar display-4 text-muted"></i>
+                    <p class="text-muted mt-2">Nenhuma demanda para agendar.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrante 3: Urgente e Não Importante -->
+    <div class="col-md-6">
+        <div class="card h-100 border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="m-0">
+                    <i class="bi bi-person-plus"></i>
+                    Q3: Urgente e Não Importante
+                </h6>
+                <small>Delegue ({{ quadrante3|length }} demandas)</small>
+            </div>
+            <div class="card-body">
+                {% for demanda in quadrante3 %}
+                <div class="card mb-2 border-warning">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-1">
+                                    <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                        <code>{{ demanda.codigo }}</code>
+                                    </a>
+                                </h6>
+                                <p class="card-text mb-1">{{ demanda.titulo|truncatechars:40 }}</p>
+                                <small class="text-muted">
+                                    {{ demanda.responsavel }} • 
+                                    Prazo: {{ demanda.data_prazo|date:"d/m/Y" }}
+                                    {% if demanda.esta_atrasada %}
+                                        <span class="text-danger">• Atrasada</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                                <span class="badge bg-warning text-dark">{{ demanda.prioridade }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="bi bi-person-check display-4 text-muted"></i>
+                    <p class="text-muted mt-2">Nenhuma demanda para delegar.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrante 4: Não Urgente e Não Importante -->
+    <div class="col-md-6">
+        <div class="card h-100 border-secondary">
+            <div class="card-header bg-secondary text-white">
+                <h6 class="m-0">
+                    <i class="bi bi-trash"></i>
+                    Q4: Não Urgente e Não Importante
+                </h6>
+                <small>Elimine se Possível ({{ quadrante4|length }} demandas)</small>
+            </div>
+            <div class="card-body">
+                {% for demanda in quadrante4 %}
+                <div class="card mb-2 border-secondary">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-1">
+                                    <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                        <code>{{ demanda.codigo }}</code>
+                                    </a>
+                                </h6>
+                                <p class="card-text mb-1">{{ demanda.titulo|truncatechars:40 }}</p>
+                                <small class="text-muted">
+                                    {{ demanda.responsavel }} • 
+                                    Prazo: {{ demanda.data_prazo|date:"d/m/Y" }}
+                                    {% if demanda.esta_atrasada %}
+                                        <span class="text-danger">• Atrasada</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                                <span class="badge bg-secondary">{{ demanda.prioridade }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="bi bi-check-circle display-4 text-success"></i>
+                    <p class="text-muted mt-2">Ótimo! Nenhuma demanda desnecessária.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resumo Estatístico -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-bar-chart"></i>
+                    Resumo da Matriz
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-danger text-white rounded">
+                            <h4 class="mb-1">{{ quadrante1|length }}</h4>
+                            <small>Fazer Agora</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-success text-white rounded">
+                            <h4 class="mb-1">{{ quadrante2|length }}</h4>
+                            <small>Agendar</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-warning text-dark rounded">
+                            <h4 class="mb-1">{{ quadrante3|length }}</h4>
+                            <small>Delegar</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-secondary text-white rounded">
+                            <h4 class="mb-1">{{ quadrante4|length }}</h4>
+                            <small>Eliminar</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Recomendações:</h6>
+                        <ul class="mb-0">
+                            {% if quadrante1 %}
+                                <li class="text-danger">
+                                    <strong>Atenção:</strong> Você tem {{ quadrante1|length }} demandas críticas que precisam de ação imediata!
+                                </li>
+                            {% endif %}
+                            {% if quadrante2 %}
+                                <li class="text-success">
+                                    Reserve tempo para as {{ quadrante2|length }} demandas importantes mas não urgentes.
+                                </li>
+                            {% endif %}
+                            {% if quadrante3 %}
+                                <li class="text-warning">
+                                    Considere delegar as {{ quadrante3|length }} demandas urgentes mas não importantes.
+                                </li>
+                            {% endif %}
+                            {% if quadrante4 %}
+                                <li class="text-secondary">
+                                    Avalie se as {{ quadrante4|length }} demandas do Q4 são realmente necessárias.
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Ações Rápidas:</h6>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'demandas:demanda_create' %}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-plus-circle"></i>
+                                Nova Demanda
+                            </a>
+                            <a href="{% url 'demandas:demanda_list' %}?order_by=data_prazo" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-clock"></i>
+                                Ver por Prazo
+                            </a>
+                            <a href="{% url 'demandas:demanda_list' %}?order_by=-prioridade" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-flag"></i>
+                                Ver por Prioridade
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .border-danger {
+        border-color: #dc3545 !important;
+        border-width: 2px !important;
+    }
+    
+    .border-success {
+        border-color: #198754 !important;
+        border-width: 2px !important;
+    }
+    
+    .border-warning {
+        border-color: #ffc107 !important;
+        border-width: 2px !important;
+    }
+    
+    .border-secondary {
+        border-color: #6c757d !important;
+        border-width: 2px !important;
+    }
+    
+    .bg-danger {
+        background-color: #dc3545 !important;
+    }
+    
+    .bg-success {
+        background-color: #198754 !important;
+    }
+    
+    .bg-warning {
+        background-color: #ffc107 !important;
+    }
+    
+    .bg-secondary {
+        background-color: #6c757d !important;
+    }
+    
+    .card-body .card {
+        transition: all 0.2s ease;
+    }
+    
+    .card-body .card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .display-4 {
+        font-size: 3rem;
+    }
+    
+    @media (max-width: 768px) {
+        .row.g-3 > div {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Adicionar tooltips aos badges de prioridade
+    document.addEventListener('DOMContentLoaded', function() {
+        const badges = document.querySelectorAll('.badge');
+        badges.forEach(function(badge) {
+            const prioridade = badge.textContent;
+            const tooltipText = `Prioridade ${prioridade}`;
+            badge.setAttribute('title', tooltipText);
+            badge.setAttribute('data-bs-toggle', 'tooltip');
+        });
+        
+        // Inicializar tooltips do Bootstrap
+        if (typeof bootstrap !== 'undefined') {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+    });
+</script>
+{% endblock %}

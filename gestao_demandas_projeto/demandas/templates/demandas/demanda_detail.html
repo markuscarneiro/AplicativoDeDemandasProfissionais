@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ demanda.codigo }} - {{ demanda.titulo }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1">
+                    <code>{{ demanda.codigo }}</code> - {{ demanda.titulo }}
+                </h1>
+                <div class="d-flex align-items-center gap-2">
+                    {% if demanda.status == 'pendente' %}
+                        <span class="badge bg-warning">Pendente</span>
+                    {% elif demanda.status == 'andamento' %}
+                        <span class="badge bg-info">Em Andamento</span>
+                    {% elif demanda.status == 'concluida' %}
+                        <span class="badge bg-success">Concluída</span>
+                    {% elif demanda.status == 'cancelada' %}
+                        <span class="badge bg-danger">Cancelada</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Em Pausa</span>
+                    {% endif %}
+                    
+                    {% if demanda.prioridade == 5 %}
+                        <span class="badge bg-danger">Prioridade 5</span>
+                    {% elif demanda.prioridade == 4 %}
+                        <span class="badge bg-warning">Prioridade 4</span>
+                    {% elif demanda.prioridade == 3 %}
+                        <span class="badge bg-info">Prioridade 3</span>
+                    {% elif demanda.prioridade == 2 %}
+                        <span class="badge bg-light text-dark">Prioridade 2</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Prioridade 1</span>
+                    {% endif %}
+                    
+                    {% if demanda.esta_atrasada %}
+                        <span class="badge bg-danger">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Atrasada
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="btn-group">
+                <a href="{% url 'demandas:demanda_update' demanda.pk %}" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i>
+                    Editar
+                </a>
+                <a href="{% url 'demandas:demanda_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Informações Principais -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <!-- Descrição -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-file-text"></i>
+                    Descrição
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ demanda.descricao|linebreaks }}</p>
+            </div>
+        </div>
+        
+        <!-- Riscos -->
+        {% if demanda.riscos %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Riscos Identificados
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ demanda.riscos|linebreaks }}</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Tags -->
+        {% if demanda.tags.all %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-tags"></i>
+                    Tags
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for tag in demanda.tags.all %}
+                    <span class="badge me-2 mb-2" style="background-color: {{ tag.cor }};">
+                        {{ tag.nome }}
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Informações Gerais -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-info-circle"></i>
+                    Informações Gerais
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Solicitante:</strong></div>
+                    <div class="col-7">{{ demanda.solicitante }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Responsável:</strong></div>
+                    <div class="col-7">{{ demanda.responsavel }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Projeto:</strong></div>
+                    <div class="col-7">{{ demanda.projeto }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Criticidade:</strong></div>
+                    <div class="col-7">
+                        {% if demanda.criticidade == 'critica' %}
+                            <span class="badge bg-danger">Crítica</span>
+                        {% elif demanda.criticidade == 'alta' %}
+                            <span class="badge bg-warning">Alta</span>
+                        {% elif demanda.criticidade == 'media' %}
+                            <span class="badge bg-info">Média</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Baixa</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Data Entrada:</strong></div>
+                    <div class="col-7">{{ demanda.data_entrada|date:"d/m/Y" }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Data Prazo:</strong></div>
+                    <div class="col-7 {% if demanda.esta_atrasada %}text-danger fw-bold{% endif %}">
+                        {{ demanda.data_prazo|date:"d/m/Y" }}
+                    </div>
+                </div>
+                {% if demanda.data_conclusao %}
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Data Conclusão:</strong></div>
+                    <div class="col-7">{{ demanda.data_conclusao|date:"d/m/Y" }}</div>
+                </div>
+                {% endif %}
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Criado por:</strong></div>
+                    <div class="col-7">{{ demanda.criado_por.get_full_name|default:demanda.criado_por.username }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-5"><strong>Criado em:</strong></div>
+                    <div class="col-7">{{ demanda.criado_em|date:"d/m/Y H:i" }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tempo -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-clock"></i>
+                    Controle de Tempo
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Estimado:</strong></div>
+                    <div class="col-6">{{ demanda.tempo_estimado }}h</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Realizado:</strong></div>
+                    <div class="col-6">{{ demanda.tempo_realizado }}h</div>
+                </div>
+                {% if demanda.tempo_estimado > 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <strong>Progresso:</strong>
+                        {% widthratio demanda.tempo_realizado demanda.tempo_estimado 100 as percentage %}
+                        <div class="progress mt-2">
+                            <div class="progress-bar {% if percentage >= 100 %}bg-success{% elif percentage >= 80 %}bg-warning{% else %}bg-info{% endif %}" 
+                                 style="width: {{ percentage }}%">
+                                {{ percentage }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs para Comentários, Histórico e Anexos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="demandaTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="comentarios-tab" data-bs-toggle="tab" 
+                                data-bs-target="#comentarios" type="button" role="tab">
+                            <i class="bi bi-chat-left-text"></i>
+                            Comentários ({{ comentarios|length }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="historico-tab" data-bs-toggle="tab" 
+                                data-bs-target="#historico" type="button" role="tab">
+                            <i class="bi bi-clock-history"></i>
+                            Histórico ({{ historico|length }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="anexos-tab" data-bs-toggle="tab" 
+                                data-bs-target="#anexos" type="button" role="tab">
+                            <i class="bi bi-paperclip"></i>
+                            Anexos ({{ anexos|length }})
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="demandaTabsContent">
+                    <!-- Tab Comentários -->
+                    <div class="tab-pane fade show active" id="comentarios" role="tabpanel">
+                        <!-- Formulário para Novo Comentário -->
+                        <div class="mb-4">
+                            <h6>Adicionar Comentário</h6>
+                            <form id="comentarioForm" method="post" action="{% url 'demandas:adicionar_comentario' demanda.pk %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    {{ comentario_form.texto }}
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i>
+                                    Adicionar Comentário
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Lista de Comentários -->
+                        <div id="comentarios-lista">
+                            {% for comentario in comentarios %}
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-person-circle fa-2x text-muted"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title mb-1">
+                                                {{ comentario.usuario.get_full_name|default:comentario.usuario.username }}
+                                                <small class="text-muted">- {{ comentario.criado_em|date:"d/m/Y H:i" }}</small>
+                                            </h6>
+                                            <p class="card-text">{{ comentario.texto|linebreaks }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-chat display-4 text-muted"></i>
+                                <p class="text-muted mt-2">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Histórico -->
+                    <div class="tab-pane fade" id="historico" role="tabpanel">
+                        {% for alteracao in historico %}
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-clock-history fa-2x text-info"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1">
+                                            {{ alteracao.usuario.get_full_name|default:alteracao.usuario.username }}
+                                            <small class="text-muted">- {{ alteracao.data_alteracao|date:"d/m/Y H:i" }}</small>
+                                        </h6>
+                                        <p class="card-text mb-1">
+                                            <strong>Campo:</strong> {{ alteracao.campo_alterado }}
+                                        </p>
+                                        {% if alteracao.valor_anterior %}
+                                        <p class="card-text mb-1">
+                                            <strong>Valor anterior:</strong> {{ alteracao.valor_anterior }}
+                                        </p>
+                                        {% endif %}
+                                        <p class="card-text">
+                                            <strong>Valor novo:</strong> {{ alteracao.valor_novo }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-clock-history display-4 text-muted"></i>
+                            <p class="text-muted mt-2">Nenhuma alteração registrada ainda.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Tab Anexos -->
+                    <div class="tab-pane fade" id="anexos" role="tabpanel">
+                        <!-- Formulário para Upload de Anexo -->
+                        <div class="mb-4">
+                            <h6>Adicionar Anexo</h6>
+                            <form method="post" action="{% url 'demandas:upload_anexo' demanda.pk %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        {{ anexo_form.arquivo }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-upload"></i>
+                                            Enviar Anexo
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">
+                                    {{ anexo_form.arquivo.help_text }}
+                                </small>
+                            </form>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Lista de Anexos -->
+                        {% for anexo in anexos %}
+                        <div class="d-flex align-items-center mb-3 p-3 border rounded">
+                            <div class="flex-shrink-0 me-3">
+                                <i class="bi bi-file-earmark fa-2x text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ anexo.nome_original }}</h6>
+                                <p class="mb-1 text-muted">
+                                    <small>
+                                        {{ anexo.tamanho_formatado }} • 
+                                        Enviado por {{ anexo.enviado_por.get_full_name|default:anexo.enviado_por.username }} • 
+                                        {{ anexo.enviado_em|date:"d/m/Y H:i" }}
+                                    </small>
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <a href="{{ anexo.arquivo.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i class="bi bi-download"></i>
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-paperclip display-4 text-muted"></i>
+                            <p class="text-muted mt-2">Nenhum anexo adicionado ainda.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .fa-2x {
+        font-size: 2em;
+    }
+    
+    .nav-tabs .nav-link {
+        border-bottom-color: transparent;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: #0d6efd;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff;
+        border-bottom-color: #fff;
+    }
+    
+    .progress {
+        height: 20px;
+    }
+    
+    .badge {
+        font-size: 0.75em;
+    }
+    
+    .card-header-tabs {
+        border-bottom: none;
+    }
+    
+    .card-header-tabs .nav-link {
+        border: 1px solid transparent;
+        border-radius: 0.375rem 0.375rem 0 0;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-resize textarea
+    document.querySelectorAll('textarea').forEach(function(textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    });
+    
+    // AJAX para comentários (opcional)
+    document.getElementById('comentarioForm').addEventListener('submit', function(e) {
+        // Para implementação futura de comentários via AJAX
+        // Por enquanto, usa o comportamento padrão do form
+    });
+</script>
+{% endblock %}

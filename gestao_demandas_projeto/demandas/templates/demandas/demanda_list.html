@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Demandas - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">
+                <i class="bi bi-list-ul"></i>
+                Lista de Demandas
+            </h1>
+            <a href="{% url 'demandas:demanda_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Nova Demanda
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros e Busca -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="m-0">
+                    <i class="bi bi-funnel"></i>
+                    Filtros e Busca
+                </h6>
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <!-- Busca -->
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ request.GET.search }}" 
+                               placeholder="Título, descrição ou código...">
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Todos os status</option>
+                            {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Prioridade -->
+                    <div class="col-md-3">
+                        <label for="prioridade" class="form-label">Prioridade</label>
+                        <select class="form-select" id="prioridade" name="prioridade">
+                            <option value="">Todas as prioridades</option>
+                            {% for value, label in prioridade_choices %}
+                                <option value="{{ value }}" {% if request.GET.prioridade == value|stringformat:"s" %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Projeto -->
+                    <div class="col-md-4">
+                        <label for="projeto" class="form-label">Projeto</label>
+                        <input type="text" class="form-control" id="projeto" name="projeto" 
+                               value="{{ request.GET.projeto }}" placeholder="Nome do projeto...">
+                    </div>
+                    
+                    <!-- Responsável -->
+                    <div class="col-md-4">
+                        <label for="responsavel" class="form-label">Responsável</label>
+                        <input type="text" class="form-control" id="responsavel" name="responsavel" 
+                               value="{{ request.GET.responsavel }}" placeholder="Nome do responsável...">
+                    </div>
+                    
+                    <!-- Tag -->
+                    <div class="col-md-4">
+                        <label for="tag" class="form-label">Tag</label>
+                        <select class="form-select" id="tag" name="tag">
+                            <option value="">Todas as tags</option>
+                            {% for tag_obj in tags %}
+                                <option value="{{ tag_obj.id }}" {% if request.GET.tag == tag_obj.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ tag_obj.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Data Início -->
+                    <div class="col-md-3">
+                        <label for="data_inicio" class="form-label">Data Início</label>
+                        <input type="date" class="form-control" id="data_inicio" name="data_inicio" 
+                               value="{{ request.GET.data_inicio }}">
+                    </div>
+                    
+                    <!-- Data Fim -->
+                    <div class="col-md-3">
+                        <label for="data_fim" class="form-label">Data Fim</label>
+                        <input type="date" class="form-control" id="data_fim" name="data_fim" 
+                               value="{{ request.GET.data_fim }}">
+                    </div>
+                    
+                    <!-- Ordenação -->
+                    <div class="col-md-3">
+                        <label for="order_by" class="form-label">Ordenar por</label>
+                        <select class="form-select" id="order_by" name="order_by">
+                            <option value="-criado_em" {% if request.GET.order_by == "-criado_em" %}selected{% endif %}>
+                                Mais recentes
+                            </option>
+                            <option value="criado_em" {% if request.GET.order_by == "criado_em" %}selected{% endif %}>
+                                Mais antigas
+                            </option>
+                            <option value="data_prazo" {% if request.GET.order_by == "data_prazo" %}selected{% endif %}>
+                                Prazo (mais próximo)
+                            </option>
+                            <option value="-data_prazo" {% if request.GET.order_by == "-data_prazo" %}selected{% endif %}>
+                                Prazo (mais distante)
+                            </option>
+                            <option value="-prioridade" {% if request.GET.order_by == "-prioridade" %}selected{% endif %}>
+                                Prioridade (maior)
+                            </option>
+                            <option value="prioridade" {% if request.GET.order_by == "prioridade" %}selected{% endif %}>
+                                Prioridade (menor)
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!-- Botões -->
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="btn-group w-100">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i>
+                                Filtrar
+                            </button>
+                            <a href="{% url 'demandas:demanda_list' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i>
+                                Limpar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabela de Demandas -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="m-0">
+                        <i class="bi bi-table"></i>
+                        Resultados ({{ page_obj.paginator.count }} demandas)
+                    </h6>
+                    <small class="text-muted">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </small>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'demandas:exportar_excel' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" 
+                       class="btn btn-success btn-sm" title="Exportar para Excel">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        Excel
+                    </a>
+                    <a href="{% url 'demandas:exportar_pdf' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" 
+                       class="btn btn-danger btn-sm" title="Exportar para PDF">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        PDF
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                {% if demandas %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Título</th>
+                                    <th>Projeto</th>
+                                    <th>Responsável</th>
+                                    <th>Status</th>
+                                    <th>Prioridade</th>
+                                    <th>Prazo</th>
+                                    <th>Tags</th>
+                                    <th width="120">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for demanda in demandas %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                            <code>{{ demanda.codigo }}</code>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'demandas:demanda_detail' demanda.pk %}" class="text-decoration-none">
+                                            <strong>{{ demanda.titulo|truncatechars:40 }}</strong>
+                                        </a>
+                                        <br>
+                                        <small class="text-muted">{{ demanda.descricao|truncatechars:60 }}</small>
+                                    </td>
+                                    <td>{{ demanda.projeto }}</td>
+                                    <td>{{ demanda.responsavel }}</td>
+                                    <td>
+                                        {% if demanda.status == 'pendente' %}
+                                            <span class="badge bg-warning">Pendente</span>
+                                        {% elif demanda.status == 'andamento' %}
+                                            <span class="badge bg-info">Em Andamento</span>
+                                        {% elif demanda.status == 'concluida' %}
+                                            <span class="badge bg-success">Concluída</span>
+                                        {% elif demanda.status == 'cancelada' %}
+                                            <span class="badge bg-danger">Cancelada</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Em Pausa</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if demanda.prioridade == 5 %}
+                                            <span class="badge bg-danger">5</span>
+                                        {% elif demanda.prioridade == 4 %}
+                                            <span class="badge bg-warning">4</span>
+                                        {% elif demanda.prioridade == 3 %}
+                                            <span class="badge bg-info">3</span>
+                                        {% elif demanda.prioridade == 2 %}
+                                            <span class="badge bg-light text-dark">2</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">1</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="{% if demanda.esta_atrasada %}text-danger fw-bold{% endif %}">
+                                            {{ demanda.data_prazo|date:"d/m/Y" }}
+                                            {% if demanda.esta_atrasada %}
+                                                <br><i class="bi bi-exclamation-triangle text-danger"></i> Atrasada
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        {% for tag in demanda.tags.all %}
+                                            <span class="badge me-1" style="background-color: {{ tag.cor }};">
+                                                {{ tag.nome }}
+                                            </span>
+                                        {% empty %}
+                                            <span class="text-muted">-</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'demandas:demanda_detail' demanda.pk %}" 
+                                               class="btn btn-outline-primary" title="Visualizar">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{% url 'demandas:demanda_update' demanda.pk %}" 
+                                               class="btn btn-outline-warning" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="{% url 'demandas:demanda_delete' demanda.pk %}" 
+                                               class="btn btn-outline-danger" title="Excluir"
+                                               onclick="return confirm('Tem certeza que deseja excluir esta demanda?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Nenhuma demanda encontrada</h5>
+                        <p class="text-muted">Tente ajustar os filtros ou criar uma nova demanda.</p>
+                        <a href="{% url 'demandas:demanda_create' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i>
+                            Criar Nova Demanda
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Paginação -->
+{% if is_paginated %}
+<div class="row mt-4">
+    <div class="col-12">
+        <nav aria-label="Paginação de demandas">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if query_params %}&{{ query_params }}{% endif %}">
+                                {{ num }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query_params %}&{{ query_params }}{% endif %}">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <div class="text-center text-muted">
+            <small>
+                Exibindo {{ page_obj.start_index }} a {{ page_obj.end_index }} 
+                de {{ page_obj.paginator.count }} demandas
+            </small>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table th {
+        border-top: none;
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
+    
+    .btn-group-sm .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .badge {
+        font-size: 0.75em;
+    }
+    
+    .table-responsive {
+        border-radius: 0.375rem;
+    }
+    
+    .pagination .page-link {
+        border-radius: 0.375rem;
+        margin: 0 2px;
+        border: 1px solid #dee2e6;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto submit form when select changes
+    document.querySelectorAll('#status, #prioridade, #tag, #order_by').forEach(function(select) {
+        select.addEventListener('change', function() {
+            this.form.submit();
+        });
+    });
+    
+    // Clear form
+    function clearFilters() {
+        window.location.href = '{% url "demandas:demanda_list" %}';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Tag - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">
+                    <i class="bi bi-tag"></i>
+                    {{ action }} Tag
+                </h5>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="card-body">
+                    <!-- Nome da Tag -->
+                    <div class="mb-3">
+                        <label for="{{ form.nome.id_for_label }}" class="form-label">
+                            {{ form.nome.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.nome.errors.0 }}
+                            </div>
+                        {% endif %}
+                        {% if form.nome.help_text %}
+                            <small class="form-text text-muted">
+                                {{ form.nome.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Cor da Tag -->
+                    <div class="mb-3">
+                        <label for="{{ form.cor.id_for_label }}" class="form-label">
+                            {{ form.cor.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="d-flex align-items-center gap-3">
+                            {{ form.cor }}
+                            <div id="preview-container">
+                                <span id="tag-preview" class="badge px-3 py-2">
+                                    <i class="bi bi-tag"></i>
+                                    <span id="preview-text">Preview</span>
+                                </span>
+                            </div>
+                        </div>
+                        {% if form.cor.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.cor.errors.0 }}
+                            </div>
+                        {% endif %}
+                        {% if form.cor.help_text %}
+                            <small class="form-text text-muted">
+                                {{ form.cor.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Cores Predefinidas -->
+                    <div class="mb-3">
+                        <label class="form-label">Cores Sugeridas:</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-sm color-preset" data-color="#dc3545" style="background-color: #dc3545; color: white;">Vermelho</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#fd7e14" style="background-color: #fd7e14; color: white;">Laranja</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#ffc107" style="background-color: #ffc107; color: black;">Amarelo</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#198754" style="background-color: #198754; color: white;">Verde</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#0dcaf0" style="background-color: #0dcaf0; color: black;">Ciano</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#0d6efd" style="background-color: #0d6efd; color: white;">Azul</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#6610f2" style="background-color: #6610f2; color: white;">Roxo</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#d63384" style="background-color: #d63384; color: white;">Rosa</button>
+                            <button type="button" class="btn btn-sm color-preset" data-color="#6c757d" style="background-color: #6c757d; color: white;">Cinza</button>
+                        </div>
+                    </div>
+                    
+                    {% if tag %}
+                    <!-- Estatísticas (só na edição) -->
+                    <div class="mb-3">
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-info-circle"></i>
+                                Informações da Tag
+                            </h6>
+                            <p class="mb-0">
+                                Esta tag está sendo utilizada em <strong>{{ tag.demandas.count }}</strong> 
+                                demanda{{ tag.demandas.count|pluralize }}.
+                            </p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'demandas:tags_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        Voltar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i>
+                        {{ action }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .color-preset {
+        border: 2px solid transparent;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+    
+    .color-preset:hover {
+        border-color: #000;
+        transform: scale(1.05);
+    }
+    
+    .color-preset:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    #tag-preview {
+        font-size: 1rem;
+        min-width: 100px;
+        text-align: center;
+        color: white;
+        background-color: #6c757d;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control[type="color"] {
+        width: 60px;
+        height: 38px;
+        padding: 2px;
+        border-radius: 0.375rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nomeInput = document.getElementById('{{ form.nome.id_for_label }}');
+        const corInput = document.getElementById('{{ form.cor.id_for_label }}');
+        const previewBadge = document.getElementById('tag-preview');
+        const previewText = document.getElementById('preview-text');
+        const colorPresets = document.querySelectorAll('.color-preset');
+        
+        // Função para atualizar o preview
+        function atualizarPreview() {
+            const nome = nomeInput.value.trim() || 'Preview';
+            const cor = corInput.value || '#6c757d';
+            
+            previewText.textContent = nome;
+            previewBadge.style.backgroundColor = cor;
+            
+            // Determinar cor do texto baseada na luminância da cor de fundo
+            const rgb = hexToRgb(cor);
+            const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+            previewBadge.style.color = luminance > 0.5 ? '#000' : '#fff';
+        }
+        
+        // Função para converter hex para RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : {r: 108, g: 117, b: 125}; // Cor padrão se inválida
+        }
+        
+        // Event listeners para atualizar preview
+        nomeInput.addEventListener('input', atualizarPreview);
+        corInput.addEventListener('input', atualizarPreview);
+        
+        // Event listeners para cores predefinidas
+        colorPresets.forEach(function(preset) {
+            preset.addEventListener('click', function(e) {
+                e.preventDefault();
+                const color = this.getAttribute('data-color');
+                corInput.value = color;
+                atualizarPreview();
+                
+                // Feedback visual
+                colorPresets.forEach(p => p.style.borderColor = 'transparent');
+                this.style.borderColor = '#000';
+            });
+        });
+        
+        // Atualizar preview inicial
+        atualizarPreview();
+        
+        // Validação do formulário
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Validar nome
+            if (!nomeInput.value.trim()) {
+                nomeInput.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                nomeInput.classList.remove('is-invalid');
+                nomeInput.classList.add('is-valid');
+            }
+            
+            // Validar cor
+            const corRegex = /^#[0-9A-Fa-f]{6}$/;
+            if (!corRegex.test(corInput.value)) {
+                corInput.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                corInput.classList.remove('is-invalid');
+                corInput.classList.add('is-valid');
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}

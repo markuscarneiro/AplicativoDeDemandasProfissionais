@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Exclusão - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="m-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Confirmar Exclusão
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-trash display-1 text-danger"></i>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-circle"></i>
+                        Atenção!
+                    </h6>
+                    <p class="mb-0">
+                        Esta ação <strong>não pode ser desfeita</strong>. 
+                        Todos os dados relacionados a esta demanda serão permanentemente removidos.
+                    </p>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">Dados que serão excluídos:</h6>
+                    
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Código:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    <code>{{ object.codigo }}</code>
+                                </div>
+                            </div>
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Título:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ object.titulo }}
+                                </div>
+                            </div>
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Status:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-secondary">{{ object.get_status_display }}</span>
+                                </div>
+                            </div>
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Responsável:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ object.responsavel }}
+                                </div>
+                            </div>
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Prioridade:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-info">{{ object.prioridade }}</span>
+                                </div>
+                            </div>
+                            {% if object.data_prazo %}
+                            <hr class="my-2">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <strong>Prazo:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ object.data_prazo|date:"d/m/Y" }}
+                                    {% if object.esta_atrasada %}
+                                        <span class="text-danger ms-2">
+                                            <i class="bi bi-exclamation-triangle"></i>
+                                            Atrasada
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dados relacionados que serão excluídos -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">Dados relacionados que também serão excluídos:</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-warning mb-3">
+                                <div class="card-body text-center py-3">
+                                    <i class="bi bi-chat-square-text display-6 text-warning"></i>
+                                    <h6 class="mt-2 mb-1">Comentários</h6>
+                                    <span class="badge bg-warning text-dark">
+                                        {{ object.comentarios.count }} item(s)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-info mb-3">
+                                <div class="card-body text-center py-3">
+                                    <i class="bi bi-clock-history display-6 text-info"></i>
+                                    <h6 class="mt-2 mb-1">Histórico</h6>
+                                    <span class="badge bg-info">
+                                        {{ object.historico_alteracoes.count }} item(s)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-success mb-3">
+                                <div class="card-body text-center py-3">
+                                    <i class="bi bi-paperclip display-6 text-success"></i>
+                                    <h6 class="mt-2 mb-1">Anexos</h6>
+                                    <span class="badge bg-success">
+                                        {{ object.anexos.count }} item(s)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-primary mb-3">
+                                <div class="card-body text-center py-3">
+                                    <i class="bi bi-tags display-6 text-primary"></i>
+                                    <h6 class="mt-2 mb-1">Tags</h6>
+                                    <span class="badge bg-primary">
+                                        {{ object.tags.count }} item(s)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Confirmação por digitação -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">Para confirmar, digite o código da demanda:</h6>
+                    <form method="post" id="deleteForm">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="bi bi-keyboard"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="confirmacao" 
+                                   name="confirmacao"
+                                   placeholder="Digite: {{ object.codigo }}"
+                                   autocomplete="off"
+                                   required>
+                        </div>
+                        <small class="text-muted">
+                            Digite exatamente: <code>{{ object.codigo }}</code>
+                        </small>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card-footer bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'demandas:demanda_detail' object.pk %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        Cancelar
+                    </a>
+                    
+                    <div>
+                        <button type="button" 
+                                class="btn btn-danger" 
+                                id="btnConfirmarExclusao"
+                                disabled>
+                            <i class="bi bi-trash"></i>
+                            Confirmar Exclusão
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mensagem de segurança adicional -->
+        <div class="alert alert-info mt-3">
+            <div class="d-flex align-items-start">
+                <i class="bi bi-lightbulb flex-shrink-0 me-2"></i>
+                <div>
+                    <h6 class="alert-heading">Dica de Segurança</h6>
+                    <p class="mb-0">
+                        Antes de excluir, considere apenas alterar o status para "Cancelada" 
+                        se você quiser manter o histórico da demanda para referência futura.
+                    </p>
+                    <a href="{% url 'demandas:demanda_update' object.pk %}" class="btn btn-outline-info btn-sm mt-2">
+                        <i class="bi bi-pencil"></i>
+                        Editar ao invés de excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .display-1 {
+        font-size: 5rem;
+        opacity: 0.7;
+    }
+    
+    .display-6 {
+        font-size: 2rem;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .border-danger {
+        border-width: 2px !important;
+    }
+    
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+    
+    .alert {
+        border-left: 4px solid;
+    }
+    
+    .alert-warning {
+        border-left-color: #ffc107;
+    }
+    
+    .alert-info {
+        border-left-color: #0dcaf0;
+    }
+    
+    #confirmacao {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+    }
+    
+    #confirmacao:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .btn-danger:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .card-footer {
+        border-top: 2px solid #dc3545;
+    }
+    
+    @media (max-width: 576px) {
+        .display-1 {
+            font-size: 3rem;
+        }
+        
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .d-flex.justify-content-between > * {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const codigoOriginal = '{{ object.codigo }}';
+        const inputConfirmacao = document.getElementById('confirmacao');
+        const btnConfirmar = document.getElementById('btnConfirmarExclusao');
+        const form = document.getElementById('deleteForm');
+        
+        // Validação em tempo real
+        inputConfirmacao.addEventListener('input', function() {
+            const valorDigitado = this.value.trim();
+            
+            if (valorDigitado === codigoOriginal) {
+                btnConfirmar.disabled = false;
+                btnConfirmar.classList.remove('btn-outline-danger');
+                btnConfirmar.classList.add('btn-danger');
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                btnConfirmar.disabled = true;
+                btnConfirmar.classList.remove('btn-danger');
+                btnConfirmar.classList.add('btn-outline-danger');
+                this.classList.remove('is-valid');
+                if (valorDigitado.length > 0) {
+                    this.classList.add('is-invalid');
+                }
+            }
+        });
+        
+        // Submissão do formulário
+        btnConfirmar.addEventListener('click', function() {
+            if (inputConfirmacao.value.trim() === codigoOriginal) {
+                if (confirm('Tem certeza absoluta que deseja excluir esta demanda? Esta ação NÃO PODE ser desfeita!')) {
+                    // Adicionar indicador de carregamento
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Excluindo...';
+                    this.disabled = true;
+                    
+                    // Submeter o formulário
+                    form.submit();
+                }
+            }
+        });
+        
+        // Permitir submit com Enter
+        inputConfirmacao.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!btnConfirmar.disabled) {
+                    btnConfirmar.click();
+                }
+            }
+        });
+        
+        // Focus automático no campo de confirmação
+        inputConfirmacao.focus();
+        
+        // Prevenir colagem
+        inputConfirmacao.addEventListener('paste', function(e) {
+            e.preventDefault();
+            alert('Por segurança, você deve digitar o código manualmente.');
+        });
+        
+        // Adicionar validação visual mais clara
+        const originalPlaceholder = inputConfirmacao.placeholder;
+        inputConfirmacao.addEventListener('focus', function() {
+            this.placeholder = 'Digite aqui...';
+        });
+        
+        inputConfirmacao.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.placeholder = originalPlaceholder;
+            }
+        });
+    });
+</script>
+{% endblock %}

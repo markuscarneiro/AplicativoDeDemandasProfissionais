@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Tag - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="m-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Confirmar Exclusão da Tag
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-trash display-4 text-warning"></i>
+                </div>
+                
+                <div class="text-center mb-4">
+                    <p class="mb-3">Você tem certeza que deseja excluir a tag:</p>
+                    <span class="badge fs-5 px-4 py-2" style="background-color: {{ tag.cor }}; color: #fff;">
+                        <i class="bi bi-tag"></i>
+                        {{ tag.nome }}
+                    </span>
+                </div>
+                
+                {% if tag.demandas.count > 0 %}
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-circle"></i>
+                        Atenção!
+                    </h6>
+                    <p class="mb-0">
+                        Esta tag está sendo utilizada em <strong>{{ tag.demandas.count }}</strong> 
+                        demanda{{ tag.demandas.count|pluralize }}. 
+                        Ao excluir a tag, ela será removida de todas essas demandas.
+                    </p>
+                </div>
+                
+                <!-- Lista das demandas que usam esta tag -->
+                <div class="mb-3">
+                    <h6>Demandas que utilizam esta tag:</h6>
+                    <div class="list-group" style="max-height: 200px; overflow-y: auto;">
+                        {% for demanda in tag.demandas.all|slice:":10" %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ demanda.titulo|truncatechars:40 }}</h6>
+                                    <small class="text-muted">{{ demanda.codigo }}</small>
+                                </div>
+                                <span class="badge bg-secondary">{{ demanda.get_status_display }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% if tag.demandas.count > 10 %}
+                        <div class="list-group-item text-center text-muted">
+                            <small>... e mais {{ tag.demandas.count|add:"-10" }} demandas</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-check-circle"></i>
+                        Exclusão Segura
+                    </h6>
+                    <p class="mb-0">
+                        Esta tag não está sendo utilizada em nenhuma demanda. 
+                        A exclusão pode ser feita com segurança.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{% url 'demandas:tags_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Cancelar
+                </a>
+                
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                        Confirmar Exclusão
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .display-4 {
+        font-size: 3rem;
+        opacity: 0.7;
+    }
+    
+    .badge.fs-5 {
+        font-size: 1.25rem !important;
+    }
+    
+    .list-group {
+        border-radius: 0.375rem;
+    }
+    
+    .list-group-item {
+        border-left: 3px solid {{ tag.cor }};
+    }
+    
+    .card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form[method="post"]');
+        
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const confirmacao = confirm(
+                    'Esta ação não pode ser desfeita. Tem certeza que deseja excluir a tag "{{ tag.nome }}"?'
+                );
+                
+                if (!confirmacao) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
