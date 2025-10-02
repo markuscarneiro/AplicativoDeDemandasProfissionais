@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,21 +22,33 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k$55__9!(^05&35b@%a9$_hw4nt#ed^l#4%+cxw9$%dczsomov'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-k$55__9!(^05&35b@%a9$_hw4nt#ed^l#4%+cxw9$%dczsomov')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-# CONFIGURAÇÃO PARA REDE LOCAL CORPORATIVA
-# Permitir acesso do IP da rede local e testes locais
+# CONFIGURAÇÃO PARA RAILWAY E REDE LOCAL
+# Permitir acesso dinâmico baseado em variáveis de ambiente
+RAILWAY_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
 ALLOWED_HOSTS = [
     '10.1.25.101',  # IP da máquina host na rede local
     'localhost',    # Acesso local
     '127.0.0.1',    # Loop-back local
-    '*',            # Temporário para facilitar acesso inicial
 ]
 
-# Configurações de segurança para rede local
+# Adicionar domínio do Railway se estiver em produção
+if RAILWAY_DOMAIN:
+    ALLOWED_HOSTS.extend([
+        RAILWAY_DOMAIN,
+        f'{RAILWAY_DOMAIN}.railway.app',
+        '*.railway.app',
+    ])
+
+# Permitir todos os hosts em desenvolvimento se DEBUG=True
+if DEBUG:
+    ALLOWED_HOSTS.append('*')
+
+# Configurações de segurança para rede local e Railway
 # Suporte para portas alternativas (8000, 8080, 3000) para contornar firewall
 CSRF_TRUSTED_ORIGINS = [
     'http://10.1.25.101:8000',
@@ -47,6 +61,13 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8080',
     'http://127.0.0.1:3000',
 ]
+
+# Adicionar domínios do Railway para CSRF
+if RAILWAY_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.extend([
+        f'https://{RAILWAY_DOMAIN}',
+        f'https://{RAILWAY_DOMAIN}.railway.app',
+    ])
 
 
 # Application definition
@@ -63,6 +84,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir arquivos estáticos no Railway
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -95,12 +117,23 @@ WSGI_APPLICATION = 'gestao_demandas.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Configuração dinâmica de banco de dados
+# Railway fornece DATABASE_URL automaticamente para PostgreSQL
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Produção (Railway) - PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+else:
+    # Desenvolvimento local - SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -140,6 +173,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Configuração do WhiteNoise para servir arquivos estáticos no Railway
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Diretórios de arquivos estáticos adicionais
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+] if (BASE_DIR / 'static').exists() else []
+
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -149,10 +190,19 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-# Security settings for development
+# Security settings for development and production
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+
+# Configurações de segurança adicionais para produção (Railway)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 ano
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

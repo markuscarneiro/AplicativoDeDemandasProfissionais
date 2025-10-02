@@ -1,0 +1,1 @@
+web: cd gestao_demandas_projeto && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn gestao_demandas.wsgi --bind 0.0.0.0:$PORT
