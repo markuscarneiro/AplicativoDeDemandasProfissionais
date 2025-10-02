@@ -1,1 +1,1 @@
-web: cd gestao_demandas_projeto && python manage.py migrate && python create_superuser.py && python manage.py collectstatic --noinput && gunicorn gestao_demandas.wsgi:application --bind 0.0.0.0:$PORT
+web: cd gestao_demandas_projeto && gunicorn gestao_demandas.wsgi:application --bind 0.0.0.0:$PORT
