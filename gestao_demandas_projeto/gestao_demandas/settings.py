@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +33,7 @@ ALLOWED_HOSTS = [
     '10.1.25.101',  # IP da máquina host na rede local
     'localhost',    # Acesso local
     '127.0.0.1',    # Loop-back local
+    '*.railway.app', # Domínios Railway por padrão
 ]
 
 # Adicionar domínio do Railway se estiver em produção
@@ -41,7 +41,6 @@ if RAILWAY_DOMAIN:
     ALLOWED_HOSTS.extend([
         RAILWAY_DOMAIN,
         f'{RAILWAY_DOMAIN}.railway.app',
-        '*.railway.app',
     ])
 
 # Permitir todos os hosts em desenvolvimento se DEBUG=True
