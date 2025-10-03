@@ -24,7 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-k$55__9!(^05&35b@%a9$_hw4nt#ed^l#4%+cxw9$%dczsomov')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+# Forçar DEBUG=False no Railway para evitar problemas
+IS_RAILWAY = os.environ.get('RAILWAY_ENVIRONMENT') or os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+if IS_RAILWAY:
+    DEBUG = False
+else:
+    DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 # CONFIGURAÇÃO PARA RAILWAY E REDE LOCAL
 # Permitir acesso dinâmico baseado em variáveis de ambiente
@@ -117,22 +122,25 @@ WSGI_APPLICATION = 'gestao_demandas.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Configuração dinâmica de banco de dados
-# Railway fornece DATABASE_URL automaticamente para PostgreSQL
+# Railway fornece DATABASE_URL automaticamente quando PostgreSQL está configurado
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
-    # Produção (Railway) - PostgreSQL
+    # Produção (Railway) - PostgreSQL via DATABASE_URL
+    import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
+    print(f"✅ Usando PostgreSQL via DATABASE_URL: {DATABASE_URL[:30]}...")
 else:
-    # Desenvolvimento local - SQLite
+    # Desenvolvimento local - SQLite  
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    print("✅ Usando SQLite para desenvolvimento local")
 
 
 # Password validation
@@ -207,9 +215,3 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Configuração do PostgreSQL para Railway via DATABASE_URL
-import os
-if 'DATABASE_URL' in os.environ:
-    import dj_database_url
-    DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'], conn_max_age=600)}
