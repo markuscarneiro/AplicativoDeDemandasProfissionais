@@ -1,0 +1,140 @@
+/* ==========================================================================
+   GRADIENTES ALTERNATIVOS PARA LOGIN
+   Use estes estilos caso não queira usar imagem de fundo
+   ========================================================================== */
+
+/* Gradiente Profissional Azul */
+.gradient-professional {
+    background: linear-gradient(135deg, 
+        #667eea 0%, 
+        #764ba2 100%
+    );
+}
+
+/* Gradiente Corporativo */
+.gradient-corporate {
+    background: linear-gradient(135deg, 
+        #0c2461 0%, 
+        #3742fa 50%, 
+        #2f3542 100%
+    );
+}
+
+/* Gradiente Moderno */
+.gradient-modern {
+    background: linear-gradient(135deg, 
+        #f093fb 0%, 
+        #f5576c 25%, 
+        #4facfe 50%, 
+        #00f2fe 100%
+    );
+}
+
+/* Gradiente Suave */
+.gradient-soft {
+    background: linear-gradient(135deg, 
+        #a8edea 0%, 
+        #fed6e3 100%
+    );
+}
+
+/* Gradiente Escuro */
+.gradient-dark {
+    background: linear-gradient(135deg, 
+        #2c3e50 0%, 
+        #34495e 25%, 
+        #2980b9 50%, 
+        #3498db 100%
+    );
+}
+
+/* Gradiente Sunset */
+.gradient-sunset {
+    background: linear-gradient(135deg, 
+        #ff9a9e 0%, 
+        #fecfef 25%, 
+        #fecfef 75%, 
+        #ffa9ce 100%
+    );
+}
+
+/* Gradiente Ocean */
+.gradient-ocean {
+    background: linear-gradient(135deg, 
+        #667db6 0%, 
+        #0082c8 25%, 
+        #0082c8 75%, 
+        #667db6 100%
+    );
+}
+
+/* Gradiente Tech */
+.gradient-tech {
+    background: linear-gradient(135deg, 
+        #1e3c72 0%, 
+        #2a5298 100%
+    );
+}
+
+/* Para aplicar um gradiente específico, use uma das classes acima no elemento .login-page-body */
+/* Exemplo no CSS principal:
+.login-page-body {
+    // Remova ou comente a linha background-image
+    // background-image: url('../images/background-login.jpg');
+}
+
+// E adicione uma das classes de gradiente:
+.login-page-body.gradient-professional {
+    background-image: none !important;
+}
+*/
+
+/* Configuração para usar apenas gradiente (sem imagem) */
+.login-page-body.gradient-only {
+    background-image: none !important;
+}
+
+/* Gradiente animado (efeito avançado) */
+.gradient-animated {
+    background: linear-gradient(-45deg, 
+        #667eea, 
+        #764ba2, 
+        #f093fb, 
+        #f5576c, 
+        #4facfe
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Para dispositivos que preferem movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    .gradient-animated {
+        animation: none;
+    }
+}
+
+/* Instruções de uso:
+   
+   1. Para usar apenas gradiente (sem imagem):
+      Adicione a classe 'gradient-only' e uma das classes de gradiente no template:
+      <div class="login-page-body gradient-only gradient-professional">
+   
+   2. Para gradiente animado:
+      <div class="login-page-body gradient-only gradient-animated">
+   
+   3. Para personalizar cores:
+      Modifique uma das classes existentes ou crie uma nova seguindo o padrão
+*/

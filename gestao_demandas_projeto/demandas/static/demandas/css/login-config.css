@@ -1,0 +1,171 @@
+/* ==========================================================================
+   CONFIGURAÇÕES PERSONALIZÁVEIS DA TELA DE LOGIN
+   
+   Este arquivo permite personalizar facilmente cores, tamanhos e efeitos
+   da tela de login sem mexer no CSS principal.
+   ========================================================================== */
+
+:root {
+    /* === CORES PRINCIPAIS === */
+    --login-primary-color: #0d6efd;
+    --login-secondary-color: #6610f2;
+    --login-accent-color: #f5576c;
+    
+    /* === BACKGROUND === */
+    --login-overlay-opacity: 0.4;          /* Opacidade do overlay escuro (0.0 a 1.0) */
+    --login-card-transparency: 0.95;       /* Transparência do card (0.0 a 1.0) */
+    --login-blur-intensity: 10px;          /* Intensidade do blur do card */
+    
+    /* === DIMENSÕES === */
+    --login-card-width: 420px;             /* Largura máxima do card */
+    --login-card-padding: 2.5rem;          /* Padding interno do card */
+    --login-border-radius: 1.5rem;         /* Bordas arredondadas */
+    
+    /* === ANIMAÇÕES === */
+    --login-animation-duration: 0.6s;      /* Duração das animações */
+    --login-hover-lift: -3px;              /* Elevação no hover dos botões */
+    --login-transition-speed: 0.3s;        /* Velocidade das transições */
+    
+    /* === TIPOGRAFIA === */
+    --login-title-size: 1.75rem;           /* Tamanho do título */
+    --login-input-size: 1rem;              /* Tamanho do texto dos inputs */
+    --login-button-size: 1.1rem;           /* Tamanho do texto do botão */
+    
+    /* === SOMBRAS === */
+    --login-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --login-button-shadow: 0 8px 25px rgba(13, 110, 253, 0.3);
+    --login-input-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* === CONFIGURAÇÕES ESPECÍFICAS POR TEMA === */
+
+/* Tema Profissional (Padrão) */
+.theme-professional {
+    --login-primary-color: #0d6efd;
+    --login-secondary-color: #6610f2;
+    --login-accent-color: #198754;
+}
+
+/* Tema Corporativo */
+.theme-corporate {
+    --login-primary-color: #0c2461;
+    --login-secondary-color: #3742fa;
+    --login-accent-color: #2f3542;
+    --login-overlay-opacity: 0.5;
+}
+
+/* Tema Moderno */
+.theme-modern {
+    --login-primary-color: #f093fb;
+    --login-secondary-color: #f5576c;
+    --login-accent-color: #4facfe;
+    --login-overlay-opacity: 0.3;
+}
+
+/* Tema Escuro */
+.theme-dark {
+    --login-primary-color: #2c3e50;
+    --login-secondary-color: #34495e;
+    --login-accent-color: #3498db;
+    --login-overlay-opacity: 0.6;
+    --login-card-transparency: 0.9;
+}
+
+/* Tema Minimalista */
+.theme-minimal {
+    --login-overlay-opacity: 0.2;
+    --login-card-transparency: 0.98;
+    --login-blur-intensity: 5px;
+    --login-border-radius: 0.5rem;
+    --login-card-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* === CONFIGURAÇÕES DE RESPONSIVIDADE === */
+
+/* Ajustes para tablets */
+@media (max-width: 768px) {
+    :root {
+        --login-card-width: 90vw;
+        --login-card-padding: 2rem;
+        --login-title-size: 1.5rem;
+    }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 480px) {
+    :root {
+        --login-card-width: 95vw;
+        --login-card-padding: 1.5rem;
+        --login-title-size: 1.25rem;
+        --login-input-size: 0.95rem;
+        --login-button-size: 1rem;
+        --login-border-radius: 1rem;
+    }
+}
+
+/* === CONFIGURAÇÕES DE ACESSIBILIDADE === */
+
+/* Para usuários que preferem movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --login-animation-duration: 0.1s;
+        --login-transition-speed: 0.1s;
+    }
+}
+
+/* Para usuários com preferência por alto contraste */
+@media (prefers-contrast: high) {
+    :root {
+        --login-overlay-opacity: 0.7;
+        --login-card-transparency: 1;
+        --login-blur-intensity: 0px;
+    }
+}
+
+/* === INSTRUÇÕES DE USO === */
+
+/*
+COMO PERSONALIZAR A TELA DE LOGIN:
+
+1. APLICAR UM TEMA:
+   Adicione uma das classes de tema no elemento .login-page-body:
+   <div class="login-page-body theme-corporate">
+
+2. PERSONALIZAR CORES:
+   Modifique as variáveis CSS em :root ou crie um novo tema:
+   
+   .meu-tema-personalizado {
+       --login-primary-color: #sua-cor;
+       --login-secondary-color: #sua-cor;
+   }
+
+3. AJUSTAR TRANSPARÊNCIAS:
+   Modifique as variáveis de opacidade:
+   --login-overlay-opacity: 0.5;        (0 = transparente, 1 = opaco)
+   --login-card-transparency: 0.9;      (0 = transparente, 1 = opaco)
+
+4. ALTERAR DIMENSÕES:
+   Ajuste tamanhos e espaçamentos:
+   --login-card-width: 500px;
+   --login-card-padding: 3rem;
+
+5. DESABILITAR ANIMAÇÕES:
+   Para melhor performance ou acessibilidade:
+   --login-animation-duration: 0s;
+   --login-transition-speed: 0s;
+
+EXEMPLOS DE IMPLEMENTAÇÃO:
+
+<!-- Tema corporativo com card maior -->
+<div class="login-page-body theme-corporate" style="--login-card-width: 500px;">
+
+<!-- Tema minimalista com menos transparência -->
+<div class="login-page-body theme-minimal" style="--login-card-transparency: 1;">
+
+<!-- Tema personalizado -->
+<div class="login-page-body" style="
+    --login-primary-color: #e74c3c;
+    --login-secondary-color: #c0392b;
+    --login-overlay-opacity: 0.3;
+">
+*/

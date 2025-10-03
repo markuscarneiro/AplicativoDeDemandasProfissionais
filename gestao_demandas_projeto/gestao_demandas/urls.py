@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),  # URLs de autenticação
 ]
 
-# Configuração para servir arquivos de media em desenvolvimento
+# Configuração para servir arquivos de media e static em desenvolvimento
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0] if settings.STATICFILES_DIRS else settings.STATIC_ROOT)

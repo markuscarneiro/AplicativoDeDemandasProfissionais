@@ -1,0 +1,48 @@
+<!-- Imagem SVG de placeholder para background de login -->
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente principal -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f093fb;stop-opacity:0.8" />
+      <stop offset="75%" style="stop-color:#f5576c;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente secundário para overlay -->
+    <radialGradient id="overlay" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0" />
+      <stop offset="70%" style="stop-color:#000000;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.3" />
+    </radialGradient>
+    
+    <!-- Padrão geométrico -->
+    <pattern id="dots" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background principal -->
+  <rect width="1920" height="1080" fill="url(#mainGradient)"/>
+  
+  <!-- Padrão geométrico sutil -->
+  <rect width="1920" height="1080" fill="url(#dots)"/>
+  
+  <!-- Formas geométricas decorativas -->
+  <circle cx="300" cy="200" r="150" fill="rgba(255,255,255,0.05)" opacity="0.5"/>
+  <circle cx="1600" cy="300" r="200" fill="rgba(255,255,255,0.03)" opacity="0.7"/>
+  <circle cx="1500" cy="800" r="100" fill="rgba(255,255,255,0.08)" opacity="0.4"/>
+  <circle cx="200" cy="900" r="120" fill="rgba(255,255,255,0.06)" opacity="0.6"/>
+  
+  <!-- Overlay final -->
+  <rect width="1920" height="1080" fill="url(#overlay)"/>
+  
+  <!-- Texto indicativo (opcional, será removido em produção) -->
+  <text x="960" y="540" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="Arial, sans-serif" font-size="24" font-weight="300">
+    Substitua esta imagem por seu background personalizado
+  </text>
+  <text x="960" y="580" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="Arial, sans-serif" font-size="16">
+    demandas/static/demandas/images/background-login.jpg
+  </text>
+</svg>

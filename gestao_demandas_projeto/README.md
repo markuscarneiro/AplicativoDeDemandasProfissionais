@@ -1,364 +1,351 @@
-# 🚀 AMBIENTE DJANGO CONFIGURADO COM SUCESSO!
+# 🚀 Quasar Cronos - Sistema de Gestão de Demandas
 
-## 📁 ESTRUTURA CRIADA
+<div align="center">
+
+![Django](https://img.shields.io/badge/Django-4.2+-092E20?style=for-the-badge&logo=django&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Produção-success?style=for-the-badge)
+
+**Sistema completo para gestão estratégica de demandas organizacionais**
+
+[Instalação](#-instalação) • [Funcionalidades](#-funcionalidades) • [Tecnologias](#-tecnologias) • [Documentação](#-documentação)
+
+</div>
+
+---
+
+## � Visão Geral
+
+**Quasar Cronos** é um sistema web robusto desenvolvido em Django para gestão completa de demandas organizacionais. Projetado para equipes que precisam de **rastreabilidade total**, **priorização inteligente** e **análise estratégica** de suas demandas.
+
+### 🎯 **Público-Alvo**
+- **Gestores de Projeto** - Controle total do portfólio
+- **Equipes de TI** - Rastreamento de tickets e melhorias
+- **Departamentos Corporativos** - Organização de solicitações
+- **Analistas** - Relatórios e métricas de performance
+
+### 🏗️ **Stack Tecnológica**
+- **Backend:** Django 4.2+ (Python)
+- **Banco:** SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Frontend:** Bootstrap 5.3 + JavaScript ES6
+- **Relatórios:** ReportLab (PDF) + OpenPyXL (Excel)
+
+---
+
+## 🔧 Tecnologias - Explicação Didática
+
+### 🖥️ **Backend (Servidor)**
+
+**Django - O "Cérebro" do Sistema**
+```python
+# Django = Cozinha de um restaurante
+# - Recebe pedidos (requests HTTP)
+# - Processa receitas (views + models)  
+# - Entrega pratos prontos (HTML renderizado)
+```
+
+**Vantagens:**
+- ✅ **ORM Integrado:** Trabalha com banco sem SQL manual
+- ✅ **Admin Automático:** Interface administrativa pronta
+- ✅ **Segurança Built-in:** CSRF, autenticação, validações
+- ✅ **Signals:** Eventos automáticos (auditoria sem esforço)
+
+**SQLite/PostgreSQL - O "Arquivo" do Sistema**
+```sql
+-- SQLite: Arquivo único (.db) 
+-- PostgreSQL: Servidor robusto para produção
+-- Django ORM traduz Python para SQL automaticamente
+```
+
+### 🎨 **Frontend (Interface)**
+
+**Bootstrap - O "Designer Profissional"**
+```html
+<!-- Bootstrap = Kit de móveis IKEA -->
+<!-- Componentes prontos: navbar, cards, botões, formulários -->
+<div class="card">          <!-- Card pronto -->
+<div class="btn btn-primary"> <!-- Botão profissional -->
+<div class="row col-md-6">   <!-- Grid responsivo -->
+```
+
+**Por que Bootstrap?**
+- ✅ **Visual profissional** em minutos
+- ✅ **Responsivo automático** (mobile-first)
+- ✅ **Consistência** em todos os navegadores
+- ✅ **Menos CSS customizado** para manter
+
+**JavaScript - O "Garçom Interativo"**
+```javascript
+// JavaScript = Garçom que reage após o prato ser servido
+// Django entrega a página, JS adiciona interatividade
+
+// Confirmações inteligentes
+if (confirm('Tem certeza que deseja excluir?')) { ... }
+
+// Validações em tempo real  
+document.getElementById('campo').addEventListener('input', validar);
+
+// Ajax para dados dinâmicos sem recarregar página
+fetch('/api/dados').then(response => response.json());
+```
+
+**Por que JavaScript?**
+- ✅ **Django é estático** após renderizar
+- ✅ **JS reage** a cliques, digitação, eventos
+- ✅ **UX moderna** sem recarregamentos constantes
+
+### 🔄 **Fluxo de Integração**
 
 ```
-c:\Users\u8178\app-demandas\
-├── .venv/                          # Ambiente virtual Python
-└── gestao_demandas_projeto/        # Projeto Django
-    ├── gestao_demandas/            # Configurações do projeto
-    ├── demandas/                   # App principal
-    ├── media/                      # Arquivos de upload
-    ├── static/                     # Arquivos estáticos
-    ├── manage.py                   # Script de gerenciamento
-    ├── db.sqlite3                  # Banco de dados
-    ├── requirements.txt            # Dependências
-    ├── COMANDOS.md                 # Comandos úteis
-    └── CHECKLIST.md                # Checklist de verificação
+� Usuário clica → 🌐 Django recebe → 🧠 View processa → 🗄️ Model consulta banco 
+→ 📄 Template gera HTML → 🎨 Bootstrap estiliza → ⚡ JavaScript adiciona interatividade 
+→ �️ Usuário vê resultado
 ```
 
-## ⚡ COMO USAR
+**Analogia Completa:**
+- **Django** = Cozinha (processa pedidos)
+- **HTML** = Prato (estrutura básica)
+- **CSS/Bootstrap** = Decoração (apresentação)
+- **JavaScript** = Garçom (interação pós-entrega)
+- **SQLite** = Despensa (armazena ingredientes)
 
-### 1. Ativar o ambiente virtual:
-```powershell
+---
+
+## ⚡ Funcionalidades
+
+### � **Autenticação & Segurança**
+- ✅ Login moderno com background personalizável
+- ✅ Controle de acesso por usuário
+- ✅ Sessões seguras com timeout automático
+- ✅ Proteção CSRF em todos os formulários
+
+### � **Gestão de Demandas**
+- ✅ **Código único automático:** `DEM-2025-001` (rastreabilidade total)
+- ✅ **CRUD completo:** Criar, listar, editar, excluir
+- ✅ **Status inteligente:** Pendente → Andamento → Concluída
+- ✅ **Priorização:** Matriz Eisenhower (Urgente/Importante)
+- ✅ **Criticidade:** Baixa, Média, Alta, Crítica
+- ✅ **Tags coloridas:** Categorização visual
+- ✅ **Anexos ilimitados:** Upload de qualquer arquivo
+- ✅ **Histórico automático:** Rastreamento de todas as alterações
+
+### 📈 **Dashboard & Analytics**
+- ✅ **Matriz Eisenhower visual:** Quadrantes interativos
+- ✅ **Gráficos em tempo real:** Status, prioridades, prazos
+- ✅ **Métricas-chave:** Demandas em atraso, concluídas, pendentes
+- ✅ **Timeline:** Visualização temporal de entregas
+
+### 🔍 **Busca & Filtros**
+- ✅ **Busca global:** Por código, título, solicitante
+- ✅ **Filtros avançados:** Status, data, responsável, projeto
+- ✅ **Ordenação inteligente:** Por prazo, prioridade, atualização
+- ✅ **Paginação otimizada:** Performance em grandes volumes
+
+### 📋 **Relatórios & Exportação**
+- ✅ **PDF profissional:** Relatórios formatados com ReportLab
+- ✅ **Excel completo:** Todas as colunas exportáveis
+- ✅ **Filtros aplicados:** Exporta apenas dados filtrados
+- ✅ **Metadados inclusos:** Data geração, usuário, critérios
+
+### 🔔 **Notificações & Validações**
+- ✅ **Alertas visuais:** Prazos vencidos, status críticos
+- ✅ **Validações automáticas:** Datas, campos obrigatórios
+- ✅ **Feedback em tempo real:** Confirmações, erros, sucessos
+- ✅ **Auditoria completa:** Quem, quando, o que alterou
+
+---
+
+## 🚀 Instalação
+
+### 📋 **Pré-requisitos**
+- **Python 3.8+** instalado
+- **Git** para clonagem do repositório
+- **Rede corporativa** com acesso à porta 8501
+
+### 1️⃣ **Clone do Repositório**
+```bash
+git clone https://github.com/markuscarneiro/app-demandas.git
+cd app-demandas/gestao_demandas_projeto
+```
+
+### 2️⃣ **Ambiente Virtual**
+```bash
 # Windows
-.venv\Scripts\activate
+python -m venv .venv
+.venv\\Scripts\\activate
+
+# Linux/Mac
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 2. Navegar para o projeto:
-```powershell
-cd gestao_demandas_projeto
+### 3️⃣ **Dependências**
+```bash
+pip install -r requirements.txt
 ```
 
-### 3. Executar o servidor:
-```powershell
-python manage.py runserver
+### 4️⃣ **Configuração do Banco**
+```bash
+# Criar estrutura do banco
+python manage.py makemigrations
+python manage.py migrate
+
+# Criar usuário administrador
+python manage.py createsuperuser
 ```
 
-### 4. Acessar no navegador:
+### 5️⃣ **Inicialização**
+```bash
+# Servidor local (desenvolvimento)
+python manage.py runserver 127.0.0.1:8501
+
+# Servidor rede (produção local)
+python manage.py runserver 0.0.0.0:8501
+```
+
+### 6️⃣ **Acesso ao Sistema**
+- **URL Principal:** `http://10.1.25.101:8501`
+- **Admin Django:** `http://10.1.25.101:8501/admin`
+- **Login:** Use credenciais criadas no passo 4
+
+### 🔧 **Scripts Prontos**
+```bash
+# Desenvolvimento
+scripts/desenvolvimento/start_server.bat
+
+# Diagnóstico
+scripts/testes/diagnostico.bat
+
+# Status das portas
+scripts/testes/PORTAS_STATUS.bat
+```
 - **Aplicação:** http://127.0.0.1:8000/
 - **Admin:** http://127.0.0.1:8000/admin/
 
-## 🌐 ACESSO NA REDE LOCAL
+## 🎨 Personalização da Tela de Login
 
-### 🚀 Como tornar o sistema acessível para colegas na rede:
+O sistema possui uma tela de login moderna com suporte a imagem de fundo personalizada:
 
-#### 1. Iniciar servidor para rede local:
-```powershell
-# Executar no diretório do projeto
-python manage.py runserver 0.0.0.0:8000
-```
+### 🖼️ Configurar Imagem de Fundo
 
-#### 2. URL de acesso para outros usuários:
-```
-http://10.1.25.101:8000
-```
+1. **Adicionar sua imagem:**
+   ```
+   demandas/static/demandas/images/background-login.jpg
+   ```
 
-#### 3. Verificar IP atual da máquina:
-```powershell
-# Windows
-ipconfig | findstr "IPv4"
+2. **Características recomendadas:**
+   - **Resolução:** 1920x1080 ou superior
+   - **Formatos:** JPG, PNG, WebP
+   - **Tamanho:** Máximo 2MB
+   - **Estilo:** Imagens com pouco detalhe no centro
 
-# Ou usar o script automatizado (ver seção Scripts)
-```
-
-### ⚠️ REQUISITOS IMPORTANTES:
-
-- ✅ **Máquina precisa estar ligada** e conectada na rede
-- ✅ **Não fechar o terminal** onde o servidor está rodando
-- ✅ **Porta 8000** deve estar liberada no Firewall do Windows
-- ⚠️ **IP pode mudar** se DHCP estiver ativo
-
-### 🔥 FIREWALL DO WINDOWS:
-
-#### Liberar porta 8000:
-```powershell
-# Executar como Administrador
-netsh advfirewall firewall add rule name="Django Server Port 8000" dir=in action=allow protocol=TCP localport=8000
-```
-
-#### Verificar se porta está liberada:
-```powershell
-netsh advfirewall firewall show rule name="Django Server Port 8000"
-```
-
-### 🛠️ TROUBLESHOOTING:
-
-#### Se colegas não conseguem acessar:
-
-1. **Verificar se servidor está rodando:**
+3. **Criar imagem de exemplo:**
    ```powershell
-   netstat -an | findstr :8000
+   cd demandas/static/demandas/images/
+   python create_background_image.py
    ```
 
-2. **Testar conectividade (do computador do colega):**
-   ```cmd
-   ping 10.1.25.101
-   telnet 10.1.25.101 8000
+### 🎨 Alternativas com Gradiente
+
+Se preferir usar apenas gradientes (sem imagem), edite o template:
+
+1. **Gradientes disponíveis:**
+   - `gradient-professional` - Azul corporativo
+   - `gradient-modern` - Cores vibrantes
+   - `gradient-dark` - Tons escuros
+   - `gradient-ocean` - Azul oceano
+   - `gradient-animated` - Gradiente animado
+
+2. **Aplicar gradiente:**
+   ```html
+   <div class="login-page-body gradient-only gradient-professional">
    ```
 
-3. **Se IP mudou, verificar novo IP:**
-   ```powershell
-   ipconfig | findstr "IPv4"
+3. **CSS adicional:**
+   ```css
+   @import 'demandas/css/login-gradients.css';
    ```
 
-4. **Verificar firewall:**
-   - Painel de Controle → Sistema e Segurança → Firewall do Windows
-   - Verificar se regra para porta 8000 existe
+### 📱 Funcionalidades da Tela de Login
 
-#### Scripts automatizados (ver seção Scripts abaixo)
+- ✅ **Background responsivo** - Adapta a diferentes telas
+- ✅ **Overlay semitransparente** - Melhora legibilidade
+- ✅ **Animações suaves** - Efeitos visuais modernos
+- ✅ **Fallback automático** - Gradiente se imagem falhar
+- ✅ **Dark mode** - Suporte automático
+- ✅ **Acessibilidade** - Foco automático e navegação por teclado
 
-### 🔀 PORTAS ALTERNATIVAS (para contornar firewall)
+### 📄 Documentação Detalhada
 
-Se a porta padrão 8000 estiver bloqueada pelo firewall corporativo, você pode usar portas alternativas que geralmente estão liberadas:
+Para mais detalhes sobre personalização:
+- `demandas/static/demandas/images/README.md` - Guia de imagens
+- `demandas/static/demandas/css/login-background.css` - Estilos principais
+- `demandas/static/demandas/css/login-gradients.css` - Gradientes alternativos
 
-#### 🎯 Portas recomendadas:
-- **8080** - Porta HTTP alternativa (quase sempre liberada)
-- **3000** - Porta de desenvolvimento web (raramente bloqueada)
-- **8000** - Porta padrão do Django
+## 📜 Scripts Disponíveis
 
-#### 📋 Comandos para portas alternativas:
-```powershell
-# Servidor na porta 8080 (recomendado para corporativo)
-python manage.py runserver 0.0.0.0:8080
+### 🔧 Desenvolvimento
+- `scripts/desenvolvimento/start_server.bat` - Iniciar servidor local
+- `scripts/desenvolvimento/start_3000.bat` - Servidor na porta 3000
+- `scripts/desenvolvimento/start_8080.bat` - Servidor na porta 8080
+- `scripts/desenvolvimento/gerenciar.bat` - Menu de comandos Django
 
-# Servidor na porta 3000 (desenvolvimento web)
-python manage.py runserver 0.0.0.0:3000
+### 🧪 Testes e Diagnóstico
+- `scripts/testes/diagnostico.bat` - Diagnóstico completo
+- `scripts/testes/PORTAS_STATUS.bat` - Status das portas
+- `scripts/testes/teste_*.bat` - Scripts de teste específicos
 
-# Servidor na porta 8000 (padrão)
-python manage.py runserver 0.0.0.0:8000
-```
+### 🚀 Deploy
+- `scripts/deploy/criar_superuser.bat` - Criar superusuário
 
-#### 🌐 URLs de acesso correspondentes:
-```
-# Porta 8080:
-http://10.1.25.101:8080
+## 🛠️ Tecnologias
 
-# Porta 3000:
-http://10.1.25.101:3000
+- **Backend:** Django 4.2.25
+- **Banco:** SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Frontend:** Bootstrap 5, HTML5, CSS3
+- **Autenticação:** Django Auth
+- **Deploy:** Railway/Heroku
 
-# Porta 8000:
-http://10.1.25.101:8000
-```
+## 📖 Documentação
 
-#### 🚀 Scripts prontos por porta:
-```powershell
-# Executar servidor na porta específica:
-start_8080.bat   # Porta 8080 (mais compatível com firewall)
-start_3000.bat   # Porta 3000 (desenvolvimento web)
-start_server.bat # Porta 8000 (padrão)
-```
+Para informações detalhadas, consulte:
+- `docs/DOCUMENTACAO_COMPLETA.md` - Guia completo do sistema
+- `docs/COMANDOS.md` - Comandos Django essenciais
+- `docs/CHECKLIST.md` - Checklist de verificação
+- `docs/IMPLEMENTACAO_COMPLETA_PORTAS.md` - Configuração de portas
+- `docs/POSTGRESQL_CONFIG.md` - Configuração PostgreSQL
 
-#### 💡 Dica importante:
-**Use as portas 8080 ou 3000 se tiver problemas com firewall!** Estas portas geralmente não precisam de permissões de administrador para serem liberadas.
-
-## 🔧 COMANDOS ESSENCIAIS (dentro da pasta do projeto)
-
-```powershell
-# Verificar se está tudo OK
-python manage.py check
-
-# Criar superusuário
-python manage.py createsuperuser
-
-# Criar migrações
-python manage.py makemigrations
-
-# Aplicar migrações
-python manage.py migrate
-
-# Executar servidor LOCAL
-python manage.py runserver
-
-# Executar servidor para REDE LOCAL
-python manage.py runserver 0.0.0.0:8000
-```
-
-## 📜 SCRIPTS AUTOMATIZADOS
-
-### Windows - start_server.bat
-Execute o arquivo `start_server.bat` para:
-- ✅ Ativar ambiente virtual automaticamente
-- ✅ Verificar e exibir IP atual da máquina
-- ✅ Iniciar servidor acessível na rede (0.0.0.0:8000)
-- ✅ Exibir URL completa para compartilhar
-
-```batch
-# Simplesmente execute:
-start_server.bat
-```
-
-### Linux/Mac - start_server.sh
-Execute o arquivo `start_server.sh` para a mesma funcionalidade no Linux/Mac.
-
-```bash
-# Tornar executável (primeira vez):
-chmod +x start_server.sh
-
-# Executar:
-./start_server.sh
-```
-
-## 🛠️ TROUBLESHOOTING DETALHADO
-
-### 🔥 Configuração do Firewall do Windows
-
-#### Método 1 - Linha de comando (Recomendado):
-```powershell
-# Executar PowerShell como Administrador
-netsh advfirewall firewall add rule name="Django Server Port 8000" dir=in action=allow protocol=TCP localport=8000
-
-# Verificar se regra foi criada:
-netsh advfirewall firewall show rule name="Django Server Port 8000"
-
-# Remover regra (se necessário):
-netsh advfirewall firewall delete rule name="Django Server Port 8000"
-```
-
-#### Método 2 - Interface Gráfica:
-1. Abrir **Painel de Controle** → **Sistema e Segurança** → **Firewall do Windows Defender**
-2. Clicar em **Configurações avançadas**
-3. Clicar em **Regras de Entrada** → **Nova Regra**
-4. Selecionar **Porta** → **Avançar**
-5. Selecionar **TCP** e **Portas locais específicas**: `8000`
-6. Selecionar **Permitir a conexão** → **Avançar**
-7. Marcar **Domínio**, **Particular** e **Público** → **Avançar**
-8. Nome: `Django Server Port 8000` → **Concluir**
-
-### 🌐 Verificação de Conectividade
-
-#### Do seu computador:
-```powershell
-# Verificar se servidor está rodando
-netstat -an | findstr :8000
-
-# Verificar IP atual
-ipconfig | findstr "IPv4"
-
-# Testar acesso local
-curl http://localhost:8000
-```
-
-#### Do computador do colega:
-```cmd
-# Testar conectividade de rede
-ping 10.1.25.101
-
-# Testar se porta está acessível
-telnet 10.1.25.101 8000
-
-# Ou usar PowerShell (Windows 10+):
-Test-NetConnection -ComputerName 10.1.25.101 -Port 8000
-```
-
-### 📱 Problemas Comuns e Soluções
-
-#### 1. "Este site não pode ser acessado"
-- ✅ Verificar se servidor está rodando (`netstat -an | findstr :8000`)
-- ✅ Verificar se IP está correto (`ipconfig`)
-- ✅ Verificar firewall (regra para porta 8000)
-- ✅ Tentar acesso local primeiro (`http://localhost:8000`)
-
-#### 2. "Connection refused" ou "Timeout"
-- ✅ Máquina host pode estar desligada
-- ✅ Servidor Django pode ter parado (verificar terminal)
-- ✅ Firewall bloqueando conexão
-- ✅ IP pode ter mudado (DHCP)
-
-#### 3. Erro 403 Forbidden
-- ✅ Verificar `ALLOWED_HOSTS` no `settings.py`
-- ✅ Verificar `CSRF_TRUSTED_ORIGINS`
-
-#### 4. IP mudou (DHCP ativo)
-```powershell
-# Verificar novo IP
-ipconfig | findstr "IPv4"
-
-# Atualizar settings.py se necessário
-# Reiniciar servidor com novo IP
-```
-
-#### 5. Múltiplas interfaces de rede
-```powershell
-# Verificar todas as interfaces
-ipconfig /all
-
-# Usar IP da interface correta (geralmente Ethernet ou Wi-Fi)
-```
-
-### 🔄 Script de Diagnóstico Rápido
-
-Crie um arquivo `diagnostico.bat`:
-```batch
-@echo off
-echo === DIAGNÓSTICO DO SERVIDOR DJANGO ===
-echo.
-echo 1. Verificando IP atual:
-ipconfig | findstr "IPv4"
-echo.
-echo 2. Verificando se servidor está rodando:
-netstat -an | findstr :8000
-echo.
-echo 3. Verificando regra de firewall:
-netsh advfirewall firewall show rule name="Django Server Port 8000"
-echo.
-pause
-```
-
-# Criar migrações
-python manage.py makemigrations
-
-# Aplicar migrações
-python manage.py migrate
-
-# Executar servidor
-python manage.py runserver
-```
-
-## ✅ CONFIGURAÇÕES APLICADAS
+## 🔧 Configurações Aplicadas
 
 - ✅ **Idioma:** Português Brasileiro (pt-br)
 - ✅ **Timezone:** America/Sao_Paulo
-- ✅ **Banco:** SQLite configurado
+- ✅ **Banco:** SQLite/PostgreSQL configurado
 - ✅ **Apps:** demandas adicionado
-- ✅ **Media:** /media/ configurado
-- ✅ **Static:** /static/ configurado
-- ✅ **Login:** URLs configuradas
-- ✅ **Segurança:** Configurações básicas aplicadas
-- ✅ **Rede Local:** ALLOWED_HOSTS configurado para 10.1.25.101
-- ✅ **CSRF:** CSRF_TRUSTED_ORIGINS configurado
-- ✅ **Scripts:** start_server.bat e start_server.sh criados
-- ✅ **Diagnóstico:** diagnostico.bat para troubleshooting
+- ✅ **Media/Static:** Configurados
+- ✅ **Autenticação:** Sistema completo
+- ✅ **Rede Local:** ALLOWED_HOSTS configurado
+- ✅ **Deploy:** Railway/Heroku ready
 
-## 📦 DEPENDÊNCIAS INSTALADAS
+## 📦 Dependências Principais
 
-- Django 4.2.25
+- Django >=4.2,<5.0
 - Pillow (manipulação de imagens)
 - openpyxl (arquivos Excel)
 - reportlab (geração de PDFs)
 - python-dateutil (manipulação de datas)
+- dj-database-url (PostgreSQL)
+- psycopg2-binary (PostgreSQL driver)
+- gunicorn (servidor WSGI)
 
-## 🎯 TESTE REALIZADO
+## 🚀 Deploy
 
-✅ **Servidor testado com sucesso!**
-- Sistema funcionando em http://127.0.0.1:8001/
-- Resposta: "Sistema de Gestão de Demandas - Configuração realizada com sucesso!"
-- Nenhum erro encontrado no `python manage.py check`
-
-## 📚 ARQUIVOS DE AJUDA CRIADOS
-
-- **COMANDOS.md** - Lista completa de comandos Django
-- **CHECKLIST.md** - Checklist detalhado de verificação
-- **README.md** - Este arquivo com instruções gerais
-
-## 🔄 PRÓXIMOS PASSOS
-
-1. **Criar superusuário:** `python manage.py createsuperuser`
-2. **Desenvolver models** em `demandas/models.py`
-3. **Criar templates** em `demandas/templates/`
-4. **Implementar views** em `demandas/views.py`
-5. **Configurar formulários** em `demandas/forms.py`
+O projeto está configurado para deploy automático no Railway/Heroku:
+1. Configure as variáveis de ambiente
+2. Faça push para o repositório
+3. O deploy é automático via `config/Procfile`
 
 ---
 
-**🎉 Ambiente de desenvolvimento Django totalmente configurado e funcional!**
+**Desenvolvido com ❤️ usando Django**

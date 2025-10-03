@@ -1,0 +1,113 @@
+/* =========================================================================
+   CORREÇÕES FINAIS PARA TELA DE LOGIN
+   ========================================================================= */
+
+/* Remove todos os elementos de debug */
+.test-static,
+.debug-info,
+[class*="debug"] {
+    display: none !important;
+}
+
+/* Correções específicas para campos de input */
+.login-page .form-control {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid rgba(13, 110, 253, 0.2) !important;
+    color: #212529 !important;
+    font-size: 16px !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 0.75rem !important;
+    transition: all 0.3s ease !important;
+    height: auto !important;
+    min-height: 48px !important;
+}
+
+.login-page .form-control:focus {
+    background-color: rgba(255, 255, 255, 1) !important;
+    border-color: #0d6efd !important;
+    color: #212529 !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    outline: none !important;
+}
+
+/* Labels acima dos campos */
+.login-page .form-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.9rem !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.login-page .form-label i {
+    margin-right: 0.5rem !important;
+    color: #ffffff !important;
+}
+
+/* Espaçamento entre campos */
+.login-page .mb-3 {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Correções específicas para campo de senha */
+.login-page input[type="password"] {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+    font-size: 16px !important;
+    letter-spacing: normal !important;
+    -webkit-text-security: disc !important;
+    text-security: disc !important;
+}
+
+/* Garantir que o cursor seja visível */
+.login-page .form-control {
+    caret-color: #0d6efd !important;
+}
+
+.login-page .form-control::placeholder {
+    color: #6c757d !important;
+    opacity: 0.7 !important;
+}
+
+/* Remove qualquer overlay ou elemento que possa estar interferindo */
+.login-page::before {
+    pointer-events: none !important;
+}
+
+/* Garantir que o container principal esteja correto */
+.login-page-body {
+    position: relative !important;
+    z-index: 0 !important;
+}
+
+.login-container {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.login-card {
+    position: relative !important;
+    z-index: 3 !important;
+}
+
+/* Melhorar visibilidade do botão */
+.login-page .btn-login {
+    background: linear-gradient(135deg, #0d6efd, #6610f2) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 1rem !important;
+    border-radius: 0.75rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.login-page .btn-login:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4) !important;
+}
+
+/* Correção para mobile */
+@media (max-width: 768px) {
+    .login-page .form-control {
+        font-size: 16px !important; /* Evita zoom automático no iOS */
+    }
+}

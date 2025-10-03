@@ -1,0 +1,67 @@
+/* TESTE DE BACKGROUND - Versão Simplificada */
+
+/* Remove estilos da navbar para o login */
+.login-page .navbar {
+    display: none !important;
+}
+
+/* Container principal do login */
+.login-page {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    
+    /* BACKGROUND COM IMAGEM */
+    background-image: url('/static/demandas/images/background-login.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+    /* FALLBACK - Gradiente caso a imagem não carregue */
+    background-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Overlay escuro sobre a imagem */
+.login-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Container do formulário */
+.login-page .login-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Card do login */
+.login-page .login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Debug: Mostrar se a imagem carregou */
+.login-page.image-loaded {
+    border: 3px solid green !important;
+}
+
+.login-page.image-failed {
+    border: 3px solid red !important;
+}

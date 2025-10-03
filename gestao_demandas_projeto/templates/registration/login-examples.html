@@ -1,0 +1,169 @@
+<!--
+EXEMPLOS DE PERSONALIZAÇÃO DA TELA DE LOGIN
+
+Este arquivo contém exemplos de como personalizar a tela de login
+com diferentes temas e configurações.
+
+Para aplicar, copie o código desejado para templates/registration/login.html
+substituindo o elemento <div class="login-page-body">
+-->
+
+<!-- =====================================================
+     EXEMPLO 1: TEMA CORPORATIVO
+     ===================================================== -->
+<div class="login-page-body theme-corporate">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 2: TEMA MODERNO COM GRADIENTE ANIMADO
+     ===================================================== -->
+<div class="login-page-body gradient-only gradient-animated">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 3: TEMA ESCURO
+     ===================================================== -->
+<div class="login-page-body theme-dark">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 4: TEMA MINIMALISTA
+     ===================================================== -->
+<div class="login-page-body theme-minimal">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 5: PERSONALIZAÇÃO INLINE
+     ===================================================== -->
+<div class="login-page-body" style="
+    --login-primary-color: #e74c3c;
+    --login-secondary-color: #c0392b;
+    --login-overlay-opacity: 0.3;
+    --login-card-width: 500px;
+">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 6: GRADIENTE PROFISSIONAL SEM IMAGEM
+     ===================================================== -->
+<div class="login-page-body gradient-only gradient-professional">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 7: TEMA OCEAN COM TRANSPARÊNCIA PERSONALIZADA
+     ===================================================== -->
+<div class="login-page-body gradient-only gradient-ocean" style="
+    --login-overlay-opacity: 0.2;
+    --login-card-transparency: 0.9;
+">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!-- =====================================================
+     EXEMPLO 8: MODO ACESSIBILIDADE (SEM ANIMAÇÕES)
+     ===================================================== -->
+<div class="login-page-body theme-minimal" style="
+    --login-animation-duration: 0s;
+    --login-transition-speed: 0s;
+    --login-blur-intensity: 0px;
+    --login-card-transparency: 1;
+">
+    <!-- Resto do conteúdo permanece igual -->
+</div>
+
+<!--
+INSTRUÇÕES DE IMPLEMENTAÇÃO:
+
+1. ESCOLHER UM EXEMPLO:
+   Copie o código do exemplo desejado
+
+2. APLICAR NO TEMPLATE:
+   Substitua a linha:
+   <div class="login-page-body">
+   
+   Pelo código do exemplo escolhido
+
+3. COMBINAÇÕES POSSÍVEIS:
+   - Você pode combinar classes de tema com gradientes
+   - Pode usar CSS inline para ajustes específicos
+   - Pode misturar temas com configurações personalizadas
+
+4. TEMAS DISPONÍVEIS:
+   - theme-professional (padrão)
+   - theme-corporate
+   - theme-modern
+   - theme-dark
+   - theme-minimal
+
+5. GRADIENTES DISPONÍVEIS:
+   - gradient-professional
+   - gradient-corporate
+   - gradient-modern
+   - gradient-soft
+   - gradient-dark
+   - gradient-sunset
+   - gradient-ocean
+   - gradient-tech
+   - gradient-animated
+
+6. VARIÁVEIS CSS PERSONALIZÁVEIS:
+   - --login-primary-color
+   - --login-secondary-color
+   - --login-accent-color
+   - --login-overlay-opacity
+   - --login-card-transparency
+   - --login-blur-intensity
+   - --login-card-width
+   - --login-card-padding
+   - --login-border-radius
+   - --login-animation-duration
+   - --login-transition-speed
+
+7. PARA USAR IMAGEM PERSONALIZADA:
+   - Substitua o arquivo: demandas/static/demandas/images/background-login.jpg
+   - Mantenha o nome do arquivo ou atualize a referência no CSS
+   - Resolução recomendada: 1920x1080 ou superior
+
+8. TESTAR RESPONSIVIDADE:
+   - Teste em diferentes tamanhos de tela
+   - Verifique em dispositivos móveis
+   - Teste com zoom aumentado para acessibilidade
+-->
+
+<!-- =====================================================
+     CÓDIGO COMPLETO DE EXEMPLO: TEMA CORPORATIVO
+     ===================================================== -->
+<!--
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'demandas/css/login-background.css' %}">
+<link rel="stylesheet" href="{% static 'demandas/css/login-config.css' %}">
+<link rel="stylesheet" href="{% static 'demandas/css/login-gradients.css' %}">
+<style>
+    body.login-page { margin: 0; padding: 0; overflow-x: hidden; }
+    .navbar { display: none !important; }
+</style>
+{% endblock %}
+
+{% block body_class %}login-page{% endblock %}
+
+{% block content %}
+<div class="login-page-body theme-corporate">
+    <div class="login-container">
+        <div class="card login-card">
+            <!-- Conteúdo do card aqui -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+-->
