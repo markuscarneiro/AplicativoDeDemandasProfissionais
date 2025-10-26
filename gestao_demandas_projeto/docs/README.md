@@ -17,6 +17,7 @@
 - **[LOGIN_BACKGROUND_DOCUMENTACAO.md](LOGIN_BACKGROUND_DOCUMENTACAO.md)** - Tela de login personalizada
 - **[IMPLEMENTACAO_LOGIN_BACKGROUND_COMPLETA.md](IMPLEMENTACAO_LOGIN_BACKGROUND_COMPLETA.md)** - Implementação completa
 - **[BOOTSTRAP_DOCUMENTACAO.md](BOOTSTRAP_DOCUMENTACAO.md)** - Bootstrap 5.3 no projeto
+- **[JAVASCRIPT_DOCUMENTACAO.md](JAVASCRIPT_DOCUMENTACAO.md)** - JavaScript ES6 e interatividade
 
 ---
 
@@ -61,7 +62,8 @@
 ├── 🎨 Interface/
 │   ├── LOGIN_BACKGROUND_DOCUMENTACAO.md           # Tela de login
 │   ├── IMPLEMENTACAO_LOGIN_BACKGROUND_COMPLETA.md # Implementação completa
-│   └── BOOTSTRAP_DOCUMENTACAO.md                  # Bootstrap 5.3 no projeto
+│   ├── BOOTSTRAP_DOCUMENTACAO.md                  # Bootstrap 5.3 no projeto
+│   └── JAVASCRIPT_DOCUMENTACAO.md                 # JavaScript ES6 e interatividade
 ├── 
 ├── 🚀 Deploy/
 │   ├── CHECKLIST.md                               # Checklist de deploy
@@ -84,7 +86,8 @@
 1. **Começar:** [README_TECNICO.md](../README_TECNICO.md) - Entender a arquitetura
 2. **Configurar:** [COMANDOS.md](COMANDOS.md) - Comandos essenciais
 3. **Interface:** [BOOTSTRAP_DOCUMENTACAO.md](BOOTSTRAP_DOCUMENTACAO.md) - Framework CSS
-4. **Personalizar:** [LOGIN_BACKGROUND_DOCUMENTACAO.md](LOGIN_BACKGROUND_DOCUMENTACAO.md) - Tela de login
+4. **Interatividade:** [JAVASCRIPT_DOCUMENTACAO.md](JAVASCRIPT_DOCUMENTACAO.md) - JavaScript ES6
+5. **Personalizar:** [LOGIN_BACKGROUND_DOCUMENTACAO.md](LOGIN_BACKGROUND_DOCUMENTACAO.md) - Tela de login
 
 ### 👨‍💼 **Para Administradores**  
 1. **Instalar:** [README.md](../README.md) - Instalação rápida

@@ -71,6 +71,28 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         letter-spacing: 0.1em !important;
     }
+    
+    /* Ajustes específicos para o ícone SVG e header */
+    .login-header {
+        padding: 2rem 2rem 2.2rem 2rem !important;
+    }
+    
+    .login-header svg {
+        display: block;
+        margin: 0 auto 0.5rem auto !important;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .login-header h3 {
+        margin-bottom: 0.3rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .login-header p {
+        margin-bottom: 0 !important;
+        line-height: 1.1 !important;
+    }
 </style>
 {% endblock %}
 
@@ -101,8 +123,35 @@
         <div class="card login-card">
             <!-- Header do Login -->
             <div class="login-header">
-                <i class="bi bi-shield-lock"></i>
-                <h3 class="mb-0">QUASAR CRONOS</h3>
+                <!-- Ícone de Órbitas Gravitacionais SVG -->
+                <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 0.5rem;">
+                    <!-- Órbita externa (maior) - rotação 0° -->
+                    <ellipse cx="40" cy="40" rx="32" ry="16" 
+                             stroke="white" 
+                             stroke-width="3" 
+                             fill="none" 
+                             opacity="0.8"/>
+                    
+                    <!-- Órbita média - rotação 60° -->
+                    <ellipse cx="40" cy="40" rx="25" ry="12.5" 
+                             stroke="white" 
+                             stroke-width="3" 
+                             fill="none" 
+                             opacity="0.9"
+                             transform="rotate(60 40 40)"/>
+                    
+                    <!-- Órbita interna (menor) - rotação 120° -->
+                    <ellipse cx="40" cy="40" rx="17" ry="8.5" 
+                             stroke="white" 
+                             stroke-width="3" 
+                             fill="none" 
+                             opacity="1"
+                             transform="rotate(120 40 40)"/>
+                    
+                    <!-- Núcleo gravitacional central -->
+                    <circle cx="40" cy="40" r="8.5" fill="white"/>
+                </svg>
+                <h3 class="mb-0">QUASAR GRAVITON</h3>
                 <p class="mb-0 opacity-75">Gestão de Demandas</p>
             </div>
             
