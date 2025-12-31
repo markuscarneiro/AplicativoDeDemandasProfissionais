@@ -1,132 +1,129 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, JsonResponse
+"""
+Views do sistema de gestão de demandas.
+
+Este módulo contém todas as views responsáveis por:
+- Dashboard e estatísticas
+- CRUD de demandas
+- Matriz de Eisenhower
+- Exportação de relatórios (Excel/PDF)
+- Gestão de tags e comentários
+- Sistema de notificações
+"""
+
+from datetime import datetime, timedelta
+from typing import Any
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
-from django.db.models import Q, Count, Avg, F
-from django.utils import timezone
-from datetime import datetime, timedelta
 from django.core.paginator import Paginator
-from django.http import Http404
-import openpyxl
-from openpyxl.styles import Font, Alignment, PatternFill
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
-from .models import Demanda, Tag, Comentario, HistoricoAlteracao, AnexoArquivo
-from .forms import DemandaForm, ComentarioForm, AnexoForm, BuscaFiltroForm
+from django.db.models import Count, F, Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-# Create your views here.
+import openpyxl
+from openpyxl.styles import Alignment, Font, PatternFill
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+
+from .forms import AnexoForm, BuscaFiltroForm, ComentarioForm, DemandaForm
+from .models import AnexoArquivo, Comentario, Demanda, HistoricoAlteracao, Tag
+
+
+# =============================================================================
+# CONSTANTES
+# =============================================================================
+
+DAYS_ALERT_THRESHOLD = 7  # Dias para alerta de prazo próximo
+DEMANDAS_PER_PAGE = 20
+
+
+# =============================================================================
+# DASHBOARD
+# =============================================================================
 
 @login_required
 def dashboard(request):
-    """View principal do sistema - Dashboard"""
-    # Estatísticas básicas
-    total_demandas = Demanda.objects.count()
-    demandas_pendentes = Demanda.objects.filter(status='pendente').count()
-    demandas_andamento = Demanda.objects.filter(status='andamento').count()
-    demandas_concluidas = Demanda.objects.filter(status='concluida').count()
-    demandas_canceladas = Demanda.objects.filter(status='cancelada').count()
-    demandas_pausa = Demanda.objects.filter(status='pausa').count()
+    """
+    View principal do sistema - Dashboard.
+    
+    Exibe estatísticas completas das demandas, alertas de prazo,
+    distribuição por status e métricas de desempenho.
+    """
+    hoje = timezone.now().date()
+    
+    # Estatísticas por status
+    status_counts = _get_status_counts()
     
     # Demandas atrasadas (prazo vencido e não concluídas)
     demandas_atrasadas = Demanda.objects.filter(
-        data_prazo__lt=timezone.now().date()
-    ).exclude(status__in=['concluida', 'cancelada']).count()
-    
-    # Demandas por prioridade
-    prioridade_stats = {}
-    for i in range(1, 6):
-        prioridade_stats[i] = Demanda.objects.filter(prioridade=i).count()
-    
-    # Alertas - demandas com prazo em até 7 dias
-    data_limite = timezone.now().date() + timedelta(days=7)
-    demandas_alerta = Demanda.objects.filter(
-        data_prazo__lte=data_limite,
-        data_prazo__gte=timezone.now().date()
-    ).exclude(status__in=['concluida', 'cancelada']).order_by('data_prazo')[:10]
-    
-    # Demandas recentes
-    demandas_recentes = Demanda.objects.all().order_by('-criado_em')[:5]
-    
-    # Demandas do usuário
-    minhas_demandas = Demanda.objects.filter(criado_por=request.user).count()
-    
-    # Estatísticas adicionais
-    # Tempo médio de conclusão
-    demandas_concluidas_com_tempo = Demanda.objects.filter(
-        status='concluida',
-        data_conclusao__isnull=False,
-        data_entrada__isnull=False
-    )
-    
-    tempo_medio_conclusao = 0
-    if demandas_concluidas_com_tempo.exists():
-        total_dias = 0
-        for demanda in demandas_concluidas_com_tempo:
-            dias = (demanda.data_conclusao - demanda.data_entrada).days
-            total_dias += dias
-        tempo_medio_conclusao = total_dias / demandas_concluidas_com_tempo.count()
-    
-    # Taxa de demandas concluídas no prazo
-    demandas_com_prazo = Demanda.objects.filter(
-        status='concluida',
-        data_conclusao__isnull=False,
-        data_prazo__isnull=False
-    )
-    
-    demandas_no_prazo = demandas_com_prazo.filter(
-        data_conclusao__lte=F('data_prazo')
+        data_prazo__lt=hoje
+    ).exclude(
+        status__in=[Demanda.Status.CONCLUIDA, Demanda.Status.CANCELADA]
     ).count()
     
-    taxa_no_prazo = 0
-    if demandas_com_prazo.exists():
-        taxa_no_prazo = (demandas_no_prazo / demandas_com_prazo.count()) * 100
+    # Estatísticas por prioridade
+    prioridade_stats = {
+        i: Demanda.objects.filter(prioridade=i).count()
+        for i in range(1, 6)
+    }
     
-    # Distribuição por projeto
+    # Alertas - demandas com prazo próximo
+    data_limite = hoje + timedelta(days=DAYS_ALERT_THRESHOLD)
+    demandas_alerta = Demanda.objects.filter(
+        data_prazo__lte=data_limite,
+        data_prazo__gte=hoje
+    ).exclude(
+        status__in=[Demanda.Status.CONCLUIDA, Demanda.Status.CANCELADA]
+    ).order_by('data_prazo')[:10]
+    
+    # Métricas de desempenho
+    tempo_medio_conclusao = _calcular_tempo_medio_conclusao()
+    taxa_no_prazo = _calcular_taxa_no_prazo()
+    
+    # Distribuições
     projetos_stats = Demanda.objects.values('projeto').annotate(
         count=Count('id')
     ).order_by('-count')[:5]
     
-    # Top solicitantes e responsáveis
-    top_solicitantes = Demanda.objects.values(
-        'solicitante'
-    ).annotate(count=Count('id')).order_by('-count')[:5]
+    top_solicitantes = Demanda.objects.values('solicitante').annotate(
+        count=Count('id')
+    ).order_by('-count')[:5]
     
-    top_responsaveis = Demanda.objects.filter(
-        responsavel__isnull=False
-    ).values(
-        'responsavel'
-    ).annotate(count=Count('id')).order_by('-count')[:5]
-    
-    # Dados para gráfico (distribuição por status)
-    status_data = {
-        'labels': ['Pendente', 'Em Andamento', 'Concluída', 'Cancelada', 'Em Pausa'],
-        'data': [demandas_pendentes, demandas_andamento, demandas_concluidas, 
-                demandas_canceladas, demandas_pausa],
-        'colors': ['#ffc107', '#17a2b8', '#28a745', '#dc3545', '#6c757d']
-    }
+    top_responsaveis = Demanda.objects.exclude(
+        responsavel=''
+    ).values('responsavel').annotate(
+        count=Count('id')
+    ).order_by('-count')[:5]
     
     context = {
-        'total_demandas': total_demandas,
-        'demandas_pendentes': demandas_pendentes,
-        'demandas_andamento': demandas_andamento,
-        'demandas_concluidas': demandas_concluidas,
-        'demandas_canceladas': demandas_canceladas,
-        'demandas_pausa': demandas_pausa,
+        # Contagens por status
+        'total_demandas': Demanda.objects.count(),
+        **status_counts,
         'demandas_atrasadas': demandas_atrasadas,
+        
+        # Estatísticas
         'prioridade_stats': prioridade_stats,
         'demandas_alerta': demandas_alerta,
-        'demandas_recentes': demandas_recentes,
-        'minhas_demandas': minhas_demandas,
-        'status_data': status_data,
+        'demandas_recentes': Demanda.objects.order_by('-criado_em')[:5],
+        'minhas_demandas': Demanda.objects.filter(criado_por=request.user).count(),
+        
+        # Dados para gráficos
+        'status_data': _get_status_chart_data(status_counts),
         'notificacoes': get_notificacoes_prazo(),
-        # Novas estatísticas
+        
+        # Métricas de desempenho
         'tempo_medio_conclusao': round(tempo_medio_conclusao, 1),
         'taxa_no_prazo': round(taxa_no_prazo, 1),
         'projetos_stats': projetos_stats,
@@ -137,61 +134,148 @@ def dashboard(request):
     return render(request, 'demandas/dashboard.html', context)
 
 
+def _get_status_counts() -> dict:
+    """Retorna contagem de demandas por status."""
+    return {
+        'demandas_pendentes': Demanda.objects.filter(status=Demanda.Status.PENDENTE).count(),
+        'demandas_andamento': Demanda.objects.filter(status=Demanda.Status.ANDAMENTO).count(),
+        'demandas_concluidas': Demanda.objects.filter(status=Demanda.Status.CONCLUIDA).count(),
+        'demandas_canceladas': Demanda.objects.filter(status=Demanda.Status.CANCELADA).count(),
+        'demandas_pausa': Demanda.objects.filter(status=Demanda.Status.PAUSA).count(),
+    }
+
+
+def _get_status_chart_data(status_counts: dict) -> dict:
+    """Retorna dados formatados para gráfico de status."""
+    return {
+        'labels': ['Pendente', 'Em Andamento', 'Concluída', 'Cancelada', 'Em Pausa'],
+        'data': [
+            status_counts['demandas_pendentes'],
+            status_counts['demandas_andamento'],
+            status_counts['demandas_concluidas'],
+            status_counts['demandas_canceladas'],
+            status_counts['demandas_pausa'],
+        ],
+        'colors': ['#ffc107', '#17a2b8', '#28a745', '#dc3545', '#6c757d']
+    }
+
+
+def _calcular_tempo_medio_conclusao() -> float:
+    """Calcula tempo médio de conclusão em dias."""
+    demandas = Demanda.objects.filter(
+        status=Demanda.Status.CONCLUIDA,
+        data_conclusao__isnull=False,
+        data_entrada__isnull=False
+    )
+    
+    if not demandas.exists():
+        return 0.0
+    
+    total_dias = sum(
+        (d.data_conclusao - d.data_entrada).days
+        for d in demandas
+    )
+    return total_dias / demandas.count()
+
+
+def _calcular_taxa_no_prazo() -> float:
+    """Calcula percentual de demandas concluídas dentro do prazo."""
+    demandas_com_prazo = Demanda.objects.filter(
+        status=Demanda.Status.CONCLUIDA,
+        data_conclusao__isnull=False,
+        data_prazo__isnull=False
+    )
+    
+    if not demandas_com_prazo.exists():
+        return 0.0
+    
+    demandas_no_prazo = demandas_com_prazo.filter(
+        data_conclusao__lte=F('data_prazo')
+    ).count()
+    
+    return (demandas_no_prazo / demandas_com_prazo.count()) * 100
+
+
+# =============================================================================
+# CRUD DE DEMANDAS
+# =============================================================================
+
+
 class DemandaListView(LoginRequiredMixin, ListView):
-    """Listagem de demandas com busca e filtros"""
+    """
+    View de listagem de demandas com busca e filtros avançados.
+    
+    Suporta filtros por: status, prioridade, projeto, responsável,
+    tag e período de data. Inclui ordenação e paginação.
+    """
+    
     model = Demanda
     template_name = 'demandas/demanda_list.html'
     context_object_name = 'demandas'
-    paginate_by = 20
+    paginate_by = DEMANDAS_PER_PAGE
+    
+    VALID_ORDER_FIELDS = {
+        'data_prazo', '-data_prazo',
+        'prioridade', '-prioridade',
+        'status', '-status',
+        'criado_em', '-criado_em',
+    }
     
     def get_queryset(self):
+        """Aplica filtros e ordenação ao queryset."""
         queryset = Demanda.objects.all()
-        
-        # Busca textual
+        queryset = self._apply_search_filter(queryset)
+        queryset = self._apply_field_filters(queryset)
+        queryset = self._apply_date_filters(queryset)
+        queryset = self._apply_ordering(queryset)
+        return queryset.distinct()
+    
+    def _apply_search_filter(self, queryset):
+        """Aplica filtro de busca textual."""
         search = self.request.GET.get('search')
         if search:
             queryset = queryset.filter(
-                Q(titulo__icontains=search) | 
+                Q(titulo__icontains=search) |
                 Q(descricao__icontains=search) |
                 Q(codigo__icontains=search)
             )
+        return queryset
+    
+    def _apply_field_filters(self, queryset):
+        """Aplica filtros por campos específicos."""
+        filters = {
+            'status': 'status',
+            'prioridade': 'prioridade',
+            'projeto': 'projeto__icontains',
+            'responsavel': 'responsavel__icontains',
+            'tag': 'tags__id',
+        }
         
-        # Filtros
-        status = self.request.GET.get('status')
-        if status:
-            queryset = queryset.filter(status=status)
+        for param, field in filters.items():
+            value = self.request.GET.get(param)
+            if value:
+                queryset = queryset.filter(**{field: value})
         
-        prioridade = self.request.GET.get('prioridade')
-        if prioridade:
-            queryset = queryset.filter(prioridade=prioridade)
-        
-        projeto = self.request.GET.get('projeto')
-        if projeto:
-            queryset = queryset.filter(projeto__icontains=projeto)
-        
-        responsavel = self.request.GET.get('responsavel')
-        if responsavel:
-            queryset = queryset.filter(responsavel__icontains=responsavel)
-        
-        tag = self.request.GET.get('tag')
-        if tag:
-            queryset = queryset.filter(tags__id=tag)
-        
-        # Filtro por período
+        return queryset
+    
+    def _apply_date_filters(self, queryset):
+        """Aplica filtros por período de data."""
         data_inicio = self.request.GET.get('data_inicio')
         data_fim = self.request.GET.get('data_fim')
+        
         if data_inicio:
             queryset = queryset.filter(data_entrada__gte=data_inicio)
         if data_fim:
             queryset = queryset.filter(data_entrada__lte=data_fim)
         
-        # Ordenação
+        return queryset
+    
+    def _apply_ordering(self, queryset):
+        """Aplica ordenação ao queryset."""
         order_by = self.request.GET.get('order_by', '-criado_em')
-        if order_by in ['data_prazo', '-data_prazo', 'prioridade', '-prioridade', 
-                       'status', '-status', 'criado_em', '-criado_em']:
+        if order_by in self.VALID_ORDER_FIELDS:
             queryset = queryset.order_by(order_by)
-        
-        return queryset.distinct()
+        return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
