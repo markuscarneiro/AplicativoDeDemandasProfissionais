@@ -92,9 +92,6 @@ venv\Scripts\activate  # Windows
 # Instale as dependências
 pip install -r requirements.txt
 
-# Entre na pasta do projeto
-cd gestao_demandas_projeto
-
 # Execute as migrações
 python manage.py migrate
 
@@ -187,8 +184,6 @@ DATABASE_URL=postgres://usuario:senha@host:porta/nome_banco
 ### Desenvolvimento Local
 
 ```bash
-cd gestao_demandas_projeto
-
 # Aplicar migrações
 python manage.py migrate
 
@@ -220,8 +215,6 @@ python manage.py runserver 0.0.0.0:8000
 ## 🧪 Testes
 
 ```bash
-cd gestao_demandas_projeto
-
 # Executar todos os testes
 python manage.py test
 
@@ -241,42 +234,37 @@ coverage report
 
 ```
 AplicativoDeDemandasProfissionais/
-├── 📄 README.md                    # Este arquivo
-├── 📄 requirements.txt             # Dependências do projeto
-├── 📄 Procfile                     # Configuração para Railway
-├── 📄 runtime.txt                  # Versão do Python
+├── 📄 README.md                # Este arquivo
+├── 📄 LICENSE                  # Licença proprietária
+├── 📄 requirements.txt         # Dependências do projeto
+├── 📄 Procfile                 # Configuração para Railway
+├── 📄 runtime.txt              # Versão do Python
+├── 📄 manage.py                # CLI do Django
 │
-└── 📂 gestao_demandas_projeto/     # Projeto Django principal
-    ├── 📄 manage.py                # CLI do Django
-    ├── 📄 db.sqlite3               # Banco de dados local
-    │
-    ├── 📂 gestao_demandas/         # Configurações do projeto
-    │   ├── 📄 settings.py          # Configurações principais
-    │   ├── 📄 urls.py              # URLs principais
-    │   ├── 📄 wsgi.py              # WSGI para produção
-    │   └── 📄 asgi.py              # ASGI (async)
-    │
-    ├── 📂 demandas/                # App principal
-    │   ├── 📄 models.py            # Modelos de dados
-    │   ├── 📄 views.py             # Views e lógica
-    │   ├── 📄 forms.py             # Formulários
-    │   ├── 📄 urls.py              # URLs do app
-    │   ├── 📄 admin.py             # Configuração do admin
-    │   ├── 📄 signals.py           # Signals (histórico)
-    │   │
-    │   ├── 📂 templates/           # Templates HTML
-    │   ├── 📂 static/              # CSS, JS, Imagens
-    │   └── 📂 migrations/          # Migrações do banco
-    │
-    ├── 📂 templates/               # Templates globais
-    │   ├── 📄 base.html            # Template base
-    │   └── 📂 registration/        # Templates de login
-    │
-    ├── 📂 static/                  # Arquivos estáticos globais
-    ├── 📂 media/                   # Uploads de usuários
-    ├── 📂 tests/                   # Testes automatizados
-    ├── 📂 scripts/                 # Scripts auxiliares
-    └── 📂 docs/                    # Documentação adicional
+├── 📂 gestao_demandas/         # Configurações do projeto Django
+│   ├── 📄 settings.py          # Configurações principais
+│   ├── 📄 urls.py              # URLs principais
+│   ├── 📄 wsgi.py              # WSGI para produção
+│   └── 📄 asgi.py              # ASGI (async)
+│
+├── 📂 demandas/                # App principal
+│   ├── 📄 models.py            # Modelos de dados
+│   ├── 📄 views.py             # Views e lógica
+│   ├── 📄 forms.py             # Formulários
+│   ├── 📄 urls.py              # URLs do app
+│   ├── 📄 admin.py             # Configuração do admin
+│   ├── 📄 signals.py           # Signals (histórico)
+│   ├── 📂 templates/           # Templates HTML do app
+│   ├── 📂 static/              # CSS, JS, Imagens do app
+│   └── 📂 migrations/          # Migrações do banco
+│
+├── 📂 templates/               # Templates globais
+│   ├── 📄 base.html            # Template base
+│   └── 📂 registration/        # Templates de login
+│
+├── 📂 static/                  # Arquivos estáticos globais
+├── 📂 tests/                   # Testes automatizados
+└── 📂 docs/                    # Documentação adicional
 ```
 
 ---

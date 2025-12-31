@@ -1,1 +1,1 @@
-web: gunicorn gestao_demandas_projeto.gestao_demandas.wsgi:application --bind 0.0.0.0:$PORT
+web: gunicorn gestao_demandas.wsgi:application --bind 0.0.0.0:$PORT
