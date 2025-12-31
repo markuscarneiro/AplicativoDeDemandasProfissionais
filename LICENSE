@@ -1,21 +1,70 @@
-MIT License
+LICENÇA PROPRIETÁRIA - PROJETO DE PORTFÓLIO
 
-Copyright (c) 2025 Markus Carneiro
+Copyright (c) 2025 Markus Carneiro. Todos os direitos reservados.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+================================================================================
+                        AVISO DE PROPRIEDADE INTELECTUAL
+================================================================================
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Este software e toda a documentação associada ("Software") são de propriedade
+exclusiva de Markus Carneiro e estão protegidos por leis de direitos autorais
+e outras leis de propriedade intelectual aplicáveis.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+================================================================================
+                              FINALIDADE DO PROJETO
+================================================================================
+
+Este projeto foi desenvolvido exclusivamente como EVIDÊNCIA DE CONHECIMENTO
+PRÁTICO em desenvolvimento de software, demonstrando competências em:
+
+• Desenvolvimento web com Python e Django
+• Arquitetura de aplicações web
+• Modelagem de banco de dados
+• Implementação de padrões de projeto
+• Boas práticas de desenvolvimento
+• Deploy e configuração de ambientes de produção
+
+================================================================================
+                                  RESTRIÇÕES
+================================================================================
+
+É EXPRESSAMENTE PROIBIDO, sem autorização prévia e por escrito do autor:
+
+1. Copiar, reproduzir ou duplicar o Software, no todo ou em parte
+2. Modificar, adaptar ou criar obras derivadas
+3. Distribuir, sublicenciar, vender ou transferir o Software
+4. Utilizar o Software para fins comerciais
+5. Remover ou alterar avisos de propriedade, marcas ou direitos autorais
+
+================================================================================
+                               USO PERMITIDO
+================================================================================
+
+Este Software pode ser visualizado e estudado APENAS para fins de:
+
+• Avaliação de competências técnicas do autor
+• Referência educacional em contextos acadêmicos (com devida citação)
+• Análise por potenciais empregadores ou clientes
+
+================================================================================
+                            ISENÇÃO DE GARANTIAS
+================================================================================
+
+ESTE SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIAS DE QUALQUER TIPO,
+EXPRESSAS OU IMPLÍCITAS, INCLUINDO, MAS NÃO SE LIMITANDO A, GARANTIAS DE
+COMERCIALIZAÇÃO, ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO E NÃO VIOLAÇÃO.
+
+EM NENHUMA CIRCUNSTÂNCIA O AUTOR SERÁ RESPONSÁVEL POR QUAISQUER DANOS
+DIRETOS, INDIRETOS, INCIDENTAIS, ESPECIAIS, EXEMPLARES OU CONSEQUENCIAIS.
+
+================================================================================
+                                  CONTATO
+================================================================================
+
+Para solicitações de uso, licenciamento ou qualquer dúvida relacionada a este
+projeto, entre em contato através do GitHub: @markuscarneiro
+
+================================================================================
+
+Data: 2025
+Versão da Licença: 1.0

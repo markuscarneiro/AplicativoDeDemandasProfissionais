@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-4.2-green.svg)](https://www.djangoproject.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Propriet%C3%A1rio-red.svg)](LICENSE)
 [![Railway](https://img.shields.io/badge/Deploy-Railway-purple.svg)](https://railway.app/)
 
 Sistema completo de gestão de demandas profissionais desenvolvido em Django, com dashboard interativo, matriz de Eisenhower, exportação de relatórios e muito mais.
@@ -429,7 +429,7 @@ Contribuições são bem-vindas! Siga os passos:
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+Este projeto é **proprietário** e foi desenvolvido como evidência de conhecimento prático em desenvolvimento de software. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
